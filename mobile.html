@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e14">
+<title>Claude Monitor</title>
+<style>
+:root{--bg-0:#0a0e14;--bg-1:#0d1117;--bg-2:#161b22;--bg-3:#1c2333;--border:#30363d;--t1:#e6edf3;--t2:#8b949e;--t3:#484f58;--blue:#58a6ff;--green:#3fb950;--orange:#d29922;--red:#f85149;--purple:#bc8cff;--teal:#39d2c0;--glow-g:rgba(63,185,80,.5);--tab-h:56px;--hdr-h:48px;--safe-b:env(safe-area-inset-bottom,0px)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg-0);color:var(--t1);min-height:100vh;overflow:hidden}
+
+/* ── Header ── */
+.hdr{position:fixed;top:0;left:0;right:0;height:var(--hdr-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.hdr-title{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.ws-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+.ws-dot.off{background:var(--red);animation:none}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 4px var(--glow-g)}50%{opacity:.5;box-shadow:0 0 12px var(--glow-g)}}
+.ws-txt{font-size:11px;color:var(--t2)}
+.clock{font-size:12px;color:var(--t3);font-variant-numeric:tabular-nums}
+
+/* ── Tab Content Area ── */
+.tab-content{position:fixed;top:var(--hdr-h);left:0;right:0;bottom:calc(var(--tab-h) + var(--safe-b));overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.tab-page{display:none;padding:12px 12px 16px;min-height:100%}
+.tab-page.active{display:block}
+
+/* ── Bottom Tabs ── */
+.tabs{position:fixed;bottom:0;left:0;right:0;height:calc(var(--tab-h) + var(--safe-b));padding-bottom:var(--safe-b);display:flex;background:var(--bg-2);border-top:1px solid var(--border);z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 0;cursor:pointer;transition:all .2s;border:none;background:none;color:var(--t3);font-family:inherit;font-size:10px;position:relative}
+.tab.active{color:var(--blue)}
+.tab.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--blue);border-radius:0 0 2px 2px}
+.tab-icon{font-size:20px;line-height:1}
+.tab-badge{position:absolute;top:4px;right:calc(50% - 18px);min-width:16px;height:16px;border-radius:8px;background:var(--green);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* ── Shared Components ── */
+.card{background:var(--bg-2);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.card.glow-g{border-color:var(--green);box-shadow:0 0 12px rgba(63,185,80,.08)}
+.card.glow-o{border-color:var(--orange)}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg-3)}
+.card-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.card-body{padding:12px 14px}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-g{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-b{background:rgba(88,166,255,.1);color:var(--blue)}
+.badge-o{background:rgba(210,153,34,.15);color:var(--orange)}
+.badge-p{background:rgba(188,140,255,.15);color:var(--purple)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-g{background:var(--green);animation:pulse 2s ease-in-out infinite}
+.dot-o{background:var(--orange)}
+.dot-idle{background:var(--t3)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(48,54,61,.3);font-size:13px}
+.row:last-child{border-bottom:none}
+.row-l{color:var(--t2)}.row-v{color:var(--t1);font-weight:600}
+.section-title{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;padding:0 2px}
+.section-title:first-child{margin-top:0}
+.empty{text-align:center;padding:32px 16px;color:var(--t3);font-size:13px}
+
+/* ── Overview Tab ── */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.stat-card{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.stat-num{font-size:24px;font-weight:700;line-height:1.2}
+.stat-num.g{color:var(--green)}.stat-num.b{color:var(--blue)}.stat-num.o{color:var(--orange)}.stat-num.p{color:var(--purple)}
+.stat-lbl{font-size:11px;color:var(--t3);margin-top:2px}
+
+.live-session{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(48,54,61,.3)}
+.live-session:last-child{border-bottom:none}
+.live-info{flex:1;min-width:0}
+.live-name{font-size:13px;font-weight:600;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-detail{font-size:11px;color:var(--t2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-model{font-size:11px;color:var(--purple);text-align:right;white-space:nowrap}
+
+/* ── Projects Tab ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.filter-bar::-webkit-scrollbar{display:none}
+.fbtn{padding:7px 16px;border-radius:16px;border:1px solid var(--border);background:none;color:var(--t2);font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.fbtn.on{background:rgba(88,166,255,.15);border-color:var(--blue);color:var(--blue)}
+.filter-info{font-size:11px;color:var(--t3);display:flex;align-items:center;white-space:nowrap;margin-left:auto}
+
+.proj-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj-path{font-size:10px;color:var(--t3);padding:4px 14px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px solid rgba(48,54,61,.3)}
+.proj-badges{display:flex;gap:4px;flex-shrink:0}
+
+/* Session Item */
+.sess{padding:10px 14px;border-bottom:1px solid rgba(48,54,61,.3);cursor:pointer;transition:background .15s}
+.sess:last-child{border-bottom:none}
+.sess:active{background:rgba(88,166,255,.05)}
+.sess-r1{display:flex;align-items:center;gap:8px}
+.sess-id{font-size:12px;font-weight:600;color:var(--t2)}
+.sess-model{font-size:11px;color:var(--purple)}
+.sess-branch{font-size:11px;color:var(--teal)}
+.sess-age{margin-left:auto;font-size:11px;color:var(--t3);font-variant-numeric:tabular-nums}
+.sess-sum{font-size:12px;color:var(--t2);margin:4px 0 2px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sess-prompt{font-size:12px;color:var(--t1);margin:2px 0 2px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8}
+.sess-meta{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 0 16px;font-size:11px;color:var(--t3)}
+.sess-meta .v{color:var(--t2);font-weight:500}
+.sess-tool{margin:4px 0 0 16px;font-size:11px;color:var(--orange);display:flex;align-items:center;gap:4px}
+.sess-tok{display:flex;gap:8px;margin:2px 0 0 16px;font-size:10px;color:var(--t3)}
+
+/* Conversation */
+.convo{margin:8px 0 4px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg-0);overflow:hidden}
+.convo-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-3);cursor:pointer;user-select:none;font-size:11px;color:var(--t2)}
+.convo-arr{font-size:9px;transition:transform .2s}.convo-arr.open{transform:rotate(90deg)}
+.convo-body{display:none;padding:6px 0;max-height:50vh;overflow-y:auto}
+.convo-body.open{display:block}
+.cv{display:flex;gap:8px;padding:6px 12px;font-size:11px;line-height:1.4}
+.cv-role{flex-shrink:0;width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:1px}
+.cv-role.u{background:rgba(88,166,255,.2);color:var(--blue)}
+.cv-role.a{background:rgba(188,140,255,.2);color:var(--purple)}
+.cv-role.t{background:rgba(210,153,34,.2);color:var(--orange)}
+.cv-content{flex:1;min-width:0}
+.cv-text{color:var(--t2);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.cv-tools{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.cv-tool-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(210,153,34,.12);color:var(--orange);border:1px solid rgba(210,153,34,.2)}
+
+/* Idle toggle */
+.idle-toggle{padding:10px 14px;font-size:12px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:6px}
+.idle-toggle:active{color:var(--t2)}
+.idle-arr{font-size:9px;transition:transform .2s}.idle-arr.open{transform:rotate(90deg)}
+.idle-box{display:none}.idle-box.open{display:block}
+
+/* ── Stats Tab ── */
+.bar-chart{display:flex;align-items:flex-end;gap:2px;height:80px;margin:8px 0}
+.bar{flex:1;background:var(--blue);opacity:.5;border-radius:2px 2px 0 0;min-width:4px;transition:height .5s}
+.bar:active{opacity:1}
+.bar-labels{display:flex;gap:2px;margin-bottom:4px}
+.bar-labels>div{flex:1;text-align:center;font-size:8px;color:var(--t3)}
+.model-bar{margin-bottom:10px}
+.model-hdr{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.model-name{color:var(--t2)}.model-val{color:var(--t3);font-variant-numeric:tabular-nums}
+.model-track{height:6px;border-radius:3px;background:var(--bg-0);overflow:hidden}
+.model-fill{height:100%;border-radius:3px;transition:width .8s}
+.model-fill.opus{background:linear-gradient(90deg,#6e40c9,#bc8cff)}
+.model-fill.sonnet{background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.model-fill.haiku{background:linear-gradient(90deg,#238636,#3fb950)}
+
+/* ── Teams Tab ── */
+.team-card{margin-bottom:12px}
+.team-name{font-size:14px;font-weight:600;color:var(--t1)}
+.team-status{font-size:11px;color:var(--green)}
+.team-desc{font-size:11px;color:var(--t3);padding:4px 14px;border-bottom:1px solid rgba(48,54,61,.3)}
+.agent-node{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(48,54,61,.2)}
+.agent-node:last-child{border-bottom:none}
+.agent-avatar{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.agent-avatar.lead{background:rgba(248,81,73,.15);color:var(--red);border:2px solid rgba(248,81,73,.3)}
+.agent-avatar.mate{background:rgba(88,166,255,.15);color:var(--blue);border:2px solid rgba(88,166,255,.3)}
+.agent-avatar.active{box-shadow:0 0 10px var(--glow-g);border-color:var(--green)}
+.agent-info{flex:1;min-width:0}
+.agent-name{font-size:13px;font-weight:600;color:var(--t1)}
+.agent-detail{font-size:11px;color:var(--t2);display:flex;gap:8px;flex-wrap:wrap;margin-top:1px}
+.agent-status{font-size:11px;font-weight:500;text-align:right}
+.agent-status.on{color:var(--green)}.agent-status.off{color:var(--t3)}
+
+.task-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(48,54,61,.2);font-size:12px}
+.task-item:last-child{border-bottom:none}
+.task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.task-dot.done{background:var(--green)}.task-dot.prog{background:var(--orange)}.task-dot.pend{background:var(--t3)}
+.task-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t2)}
+.task-owner{font-size:10px;color:var(--t3);flex-shrink:0}
+
+.msg-item{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px solid rgba(48,54,61,.2);font-size:12px}
+.msg-item:last-child{border-bottom:none}
+.msg-header{display:flex;align-items:center;gap:6px}
+.msg-from{color:var(--blue);font-weight:500}
+.msg-arrow{color:var(--t3);font-size:10px}
+.msg-to{color:var(--teal)}
+.msg-type{font-size:9px;padding:1px 6px;border-radius:4px;margin-left:auto}
+.msg-type.task{background:rgba(210,153,34,.15);color:var(--orange)}
+.msg-type.idle{background:rgba(72,79,88,.2);color:var(--t3)}
+.msg-type.message{background:rgba(88,166,255,.1);color:var(--blue)}
+.msg-text{color:var(--t3);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:2px}
+
+/* Activity Item */
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(48,54,61,.2);font-size:12px}
+.act-item:last-child{border-bottom:none}
+.act-time{font-size:11px;color:var(--t3);min-width:55px;font-variant-numeric:tabular-nums}
+.act-body{flex:1;min-width:0}
+.act-text{color:var(--t2);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3}
+.act-proj{font-size:10px;color:var(--blue);margin-top:2px;opacity:.7}
+
+/* ── Desktop redirect banner ── */
+.desktop-link{text-align:center;padding:8px;font-size:11px;color:var(--t3)}
+.desktop-link a{color:var(--blue);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hdr">
+  <div class="hdr-title">Claude Monitor</div>
+  <div class="hdr-r">
+    <span class="clock" id="clk"></span>
+    <div class="ws-dot" id="wsDot"></div>
+    <span class="ws-txt" id="wsTxt">LIVE</span>
+  </div>
+</div>
+
+<!-- Tab Pages -->
+<div class="tab-content">
+  <!-- Overview -->
+  <div class="tab-page active" id="page-overview"></div>
+  <!-- Projects -->
+  <div class="tab-page" id="page-projects"></div>
+  <!-- Stats -->
+  <div class="tab-page" id="page-stats"></div>
+  <!-- Teams -->
+  <div class="tab-page" id="page-teams"></div>
+</div>
+
+<!-- Bottom Tab Bar -->
+<div class="tabs">
+  <button class="tab active" data-tab="overview" onclick="switchTab('overview')">
+    <span class="tab-icon">&#9673;</span>
+    <span>Overview</span>
+  </button>
+  <button class="tab" data-tab="projects" onclick="switchTab('projects')">
+    <span class="tab-icon">&#9782;</span>
+    <span>Projects</span>
+    <span class="tab-badge" id="projBadge" style="display:none"></span>
+  </button>
+  <button class="tab" data-tab="stats" onclick="switchTab('stats')">
+    <span class="tab-icon">&#9636;</span>
+    <span>Stats</span>
+  </button>
+  <button class="tab" data-tab="teams" onclick="switchTab('teams')">
+    <span class="tab-icon">&#9673;</span>
+    <span>Teams</span>
+    <span class="tab-badge" id="teamBadge" style="display:none"></span>
+  </button>
+</div>
+
+<script>
+/* ── State ── */
+let D=null, CF='active', EI={}, EC={}, curTab='overview';
+
+/* ── Helpers ── */
+const E=s=>s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';
+const FN=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);
+function FA(s){if(s<60)return Math.floor(s)+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m';return Math.floor(s/86400)+'d'}
+function FD(ms){const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);return h>0?h+'h '+m+'m':m+'m'}
+function SM(m){if(!m)return'';if(m.includes('opus-4-6'))return'Opus 4.6';if(m.includes('opus-4-5'))return'Opus 4.5';if(m.includes('sonnet-4-5'))return'Sonnet 4.5';if(m.includes('haiku-4-5'))return'Haiku 4.5';return m.split('-').slice(1,3).join(' ')}
+function MC(m){if(m.includes('opus'))return'opus';if(m.includes('sonnet'))return'sonnet';if(m.includes('haiku'))return'haiku';return'opus'}
+
+/* ── Clock ── */
+function UC(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-US',{hour12:false})}
+setInterval(UC,1000);UC();
+
+/* ── Tab Switching ── */
+function switchTab(tab){
+  curTab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  // Scroll to top
+  document.querySelector('.tab-content').scrollTop=0;
+}
+
+/* ── Filter ── */
+function setF(f){CF=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('on',b.dataset.f===f));if(D)renderProjects(D.projects)}
+
+/* ── WebSocket ── */
+let ws=null;
+function conn(){
+  const p=location.protocol==='https:'?'wss:':'ws:';
+  ws=new WebSocket(`${p}//${location.host}/ws`);
+  ws.onopen=()=>{document.getElementById('wsDot').classList.remove('off');document.getElementById('wsTxt').textContent='LIVE'};
+  ws.onmessage=e=>{try{D=JSON.parse(e.data);render(D)}catch(er){console.error(er)}};
+  ws.onclose=()=>{document.getElementById('wsDot').classList.add('off');document.getElementById('wsTxt').textContent='OFFLINE';setTimeout(conn,3000)};
+  ws.onerror=()=>ws.close();
+}
+conn();
+
+/* ── Render ── */
+function render(d){
+  renderOverview(d);
+  renderProjects(d.projects);
+  renderStats(d.stats,d.tasks);
+  renderTeams(d.teams,d.tasks);
+  // Update badges
+  const act=d.summary?.totalActiveSessions||0;
+  const pb=document.getElementById('projBadge');
+  if(act>0){pb.textContent=act;pb.style.display='flex'}else{pb.style.display='none'}
+  const tc=d.teams?.length||0;
+  const tb=document.getElementById('teamBadge');
+  if(tc>0){tb.textContent=tc;tb.style.display='flex'}else{tb.style.display='none'}
+}
+
+/* ── Overview ── */
+function renderOverview(d){
+  const el=document.getElementById('page-overview');
+  const s=d.summary||{};const st=d.stats||{};
+  let h='';
+  // Stats grid
+  h+=`<div class="stat-grid">
+    <div class="stat-card"><div class="stat-num b">${s.totalProjects||0}</div><div class="stat-lbl">Projects</div></div>
+    <div class="stat-card"><div class="stat-num g">${s.totalActiveSessions||0}</div><div class="stat-lbl">Active</div></div>
+    <div class="stat-card"><div class="stat-num o">${s.totalRecentSessions||0}</div><div class="stat-lbl">Recent</div></div>
+    <div class="stat-card"><div class="stat-num p">${FN(st.totalMessages||0)}</div><div class="stat-lbl">Messages</div></div>
+  </div>`;
+
+  // Active sessions quick list
+  const allSessions=[];
+  if(d.projects){
+    for(const p of d.projects){
+      for(const ss of p.sessions){
+        if(ss.status==='active'||ss.status==='recent'){
+          allSessions.push({...ss,projectName:p.name});
+        }
+      }
+    }
+  }
+
+  if(allSessions.length>0){
+    h+=`<div class="section-title">Live Sessions</div><div class="card">`;
+    for(const ss of allSessions.slice(0,10)){
+      const dotCls=ss.status==='active'?'dot-g':'dot-o';
+      h+=`<div class="live-session">
+        <div class="dot ${dotCls}"></div>
+        <div class="live-info">
+          <div class="live-name">${E(ss.projectName)}</div>
+          <div class="live-detail">${ss.summary?E(ss.summary):(ss.live?.lastUserMessage?'"'+E(ss.live.lastUserMessage)+'"':'#'+E(ss.sessionId))}</div>
+        </div>
+        <div class="live-model">${ss.live?SM(ss.live.model):''}</div>
+      </div>`;
+    }
+    h+=`</div>`;
+  }
+
+  // Recent activity
+  const hist=d.history||[];
+  if(hist.length>0){
+    h+=`<div class="section-title">Recent Activity</div><div class="card"><div class="card-body">`;
+    for(const a of hist.slice(0,8)){
+      h+=`<div class="act-item">
+        <div class="act-time">${E(a.time)}</div>
+        <div class="act-body">
+          <div class="act-text">${E(a.display)}</div>
+          ${a.project?`<div class="act-proj">${E(a.project)}</div>`:''}
+        </div>
+      </div>`;
+    }
+    h+=`</div></div>`;
+  }
+
+  // Desktop link
+  h+=`<div class="desktop-link"><a href="/">Desktop version</a></div>`;
+  el.innerHTML=h;
+}
+
+/* ── Projects ── */
+function renderProjects(projects){
+  const el=document.getElementById('page-projects');
+  if(!projects||!projects.length){el.innerHTML='<div class="empty">No projects found</div>';return}
+
+  let filtered;
+  if(CF==='active'){filtered=projects.filter(p=>p.hasActive);if(!filtered.length)filtered=projects.filter(p=>p.hasRecent||p.hasActive);if(!filtered.length)filtered=projects.slice(0,8)}
+  else if(CF==='recent'){filtered=projects.filter(p=>p.hasActive||p.hasRecent);if(!filtered.length)filtered=projects.slice(0,12)}
+  else filtered=projects;
+
+  let h=`<div class="filter-bar">
+    <button class="fbtn ${CF==='active'?'on':''}" data-f="active" onclick="setF('active')">Active</button>
+    <button class="fbtn ${CF==='recent'?'on':''}" data-f="recent" onclick="setF('recent')">Recent</button>
+    <button class="fbtn ${CF==='all'?'on':''}" data-f="all" onclick="setF('all')">All</button>
+    <div class="filter-info">${filtered.length}/${projects.length}</div>
+  </div>`;
+
+  for(const p of filtered){
+    const glow=p.hasActive?'glow-g':p.hasRecent?'glow-o':'';
+    const dotCls=p.hasActive?'dot-g':p.hasRecent?'dot-o':'dot-idle';
+    h+=`<div class="card ${glow}"><div class="card-hdr">
+      <div class="proj-name"><div class="dot ${dotCls}"></div>${E(p.name)}</div>
+      <div class="proj-badges">`;
+    if(p.activeSessions>0)h+=`<span class="badge badge-g">${p.activeSessions}</span>`;
+    if(p.recentSessions>0)h+=`<span class="badge badge-o">${p.recentSessions}</span>`;
+    h+=`<span class="badge badge-b">${p.totalSessions}</span>`;
+    h+=`</div></div>`;
+    h+=`<div class="proj-path">${E(p.path)}</div>`;
+
+    const actS=p.sessions.filter(s=>s.status==='active');
+    const recS=p.sessions.filter(s=>s.status==='recent');
+    const idleS=p.sessions.filter(s=>s.status==='idle');
+
+    for(const s of actS)h+=renderSess(s,true);
+    for(const s of recS)h+=renderSess(s,true);
+
+    if(idleS.length>0){
+      const isO=EI[p.dirName]||false;
+      const show=CF==='all'?idleS:idleS.slice(0,3);
+      h+=`<div class="idle-toggle" onclick="togIdle('${E(p.dirName)}')"><span class="idle-arr ${isO?'open':''}" id="ia-${E(p.dirName)}">&#9654;</span>${idleS.length} idle session${idleS.length>1?'s':''}</div>`;
+      h+=`<div class="idle-box ${isO?'open':''}" id="ib-${E(p.dirName)}">`;
+      for(const s of show)h+=renderSess(s,false);
+      if(CF!=='all'&&idleS.length>3)h+=`<div style="padding:8px 14px;font-size:11px;color:var(--t3)">+${idleS.length-3} more</div>`;
+      h+=`</div>`;
+    }
+
+    if(!p.sessions.length)h+=`<div class="empty" style="padding:16px">No sessions</div>`;
+    h+=`</div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderSess(s,det){
+  let h=`<div class="sess ${s.status}"><div class="sess-r1"><div class="dot ${s.status==='active'?'dot-g':s.status==='recent'?'dot-o':'dot-idle'}"></div>`;
+  h+=`<span class="sess-id">#${E(s.sessionId)}</span>`;
+  if(s.live&&s.live.model)h+=`<span class="sess-model">${SM(s.live.model)}</span>`;
+  if(s.gitBranch&&s.gitBranch!=='HEAD')h+=`<span class="sess-branch">${E(s.gitBranch)}</span>`;
+  h+=`<span class="sess-age">${s.status==='active'?'now':FA(s.age)+' ago'}</span></div>`;
+
+  if(s.summary)h+=`<div class="sess-sum">${E(s.summary)}</div>`;
+
+  if(det){
+    if(s.live&&s.live.lastUserMessage)h+=`<div class="sess-prompt">"${E(s.live.lastUserMessage)}"</div>`;
+    else if(s.firstPrompt&&s.firstPrompt!=='No prompt')h+=`<div class="sess-prompt">"${E(s.firstPrompt)}"</div>`;
+
+    h+=`<div class="sess-meta"><span><span class="v">${s.messageCount||0}</span> msgs</span>`;
+    if(s.fileSize)h+=`<span><span class="v">${FN(s.fileSize)}</span> bytes</span>`;
+    h+=`</div>`;
+
+    if(s.live&&s.live.lastTool)h+=`<div class="sess-tool">&#9654; ${E(s.live.lastTool)}</div>`;
+    if(s.live&&(s.live.inputTokens||s.live.outputTokens)){
+      h+=`<div class="sess-tok"><span>in:${FN(s.live.inputTokens)}</span><span>out:${FN(s.live.outputTokens)}</span>`;
+      if(s.live.cacheRead)h+=`<span>cache:${FN(s.live.cacheRead)}</span>`;
+      h+=`</div>`;
+    }
+
+    // Conversation
+    if(s.conversation&&s.conversation.length>0){
+      const cid=s.fullId||s.sessionId;
+      const isO=EC[cid]===true;
+      h+=`<div class="convo"><div class="convo-hdr" onclick="togConvo('${E(cid)}')"><span><span class="convo-arr ${isO?'open':''}" id="ca-${E(cid)}">&#9654;</span> Conversation (${s.conversation.length})</span></div>`;
+      h+=`<div class="convo-body ${isO?'open':''}" id="cb-${E(cid)}">`;
+      for(const turn of s.conversation){
+        if(turn.role==='user'){
+          h+=`<div class="cv"><div class="cv-role u">U</div><div class="cv-content"><div class="cv-text">${E(turn.text)}</div></div></div>`;
+        }else if(turn.role==='assistant'){
+          h+=`<div class="cv"><div class="cv-role a">A</div><div class="cv-content">`;
+          if(turn.text)h+=`<div class="cv-text">${E(turn.text)}</div>`;
+          if(turn.tools&&turn.tools.length>0){
+            h+=`<div class="cv-tools">`;
+            for(const t of turn.tools)h+=`<span class="cv-tool-tag">${E(t)}</span>`;
+            h+=`</div>`;
+          }
+          h+=`</div></div>`;
+        }else if(turn.role==='tool_result'){
+          h+=`<div class="cv"><div class="cv-role t">T</div><div class="cv-content"><div class="cv-text" style="color:var(--t3)">${E(turn.text)}</div></div></div>`;
+        }
+      }
+      h+=`</div></div>`;
+    }
+  }else{
+    h+=`<div class="sess-meta"><span><span class="v">${s.messageCount||0}</span> msgs</span></div>`;
+  }
+  h+=`</div>`;
+  return h;
+}
+
+function togIdle(dn){EI[dn]=!EI[dn];const el=document.getElementById('ib-'+dn);const ar=document.getElementById('ia-'+dn);if(el)el.classList.toggle('open');if(ar)ar.classList.toggle('open')}
+function togConvo(id){EC[id]=!EC[id];const el=document.getElementById('cb-'+id);const ar=document.getElementById('ca-'+id);if(el)el.classList.toggle('open');if(ar)ar.classList.toggle('open')}
+
+/* ── Stats ── */
+function renderStats(stats,tasks){
+  const el=document.getElementById('page-stats');
+  if(!stats||!stats.totalSessions){el.innerHTML='<div class="empty">No stats available</div>';return}
+
+  let h='';
+  // Key stats
+  h+=`<div class="section-title">Overview</div><div class="card"><div class="card-body">`;
+  h+=`<div class="row"><span class="row-l">Total Sessions</span><span class="row-v">${stats.totalSessions||0}</span></div>`;
+  h+=`<div class="row"><span class="row-l">Total Messages</span><span class="row-v">${FN(stats.totalMessages||0)}</span></div>`;
+  if(stats.firstSessionDate)h+=`<div class="row"><span class="row-l">Since</span><span class="row-v">${new Date(stats.firstSessionDate).toLocaleDateString()}</span></div>`;
+  const lo=stats.longestSession||{};
+  if(lo.duration)h+=`<div class="row"><span class="row-l">Longest Session</span><span class="row-v">${FD(lo.duration)}</span></div>`;
+  const da=stats.dailyActivity||[];const td=da.length>0?da[da.length-1]:null;
+  if(td){
+    h+=`<div class="row"><span class="row-l">Today Msgs</span><span class="row-v" style="color:var(--orange)">${td.messageCount||0}</span></div>`;
+    h+=`<div class="row"><span class="row-l">Today Tools</span><span class="row-v" style="color:var(--purple)">${td.toolCallCount||0}</span></div>`;
+  }
+  if(tasks&&tasks.total>0)h+=`<div class="row"><span class="row-l">Tasks</span><span class="row-v" style="color:var(--green)">${tasks.completed}/${tasks.total}</span></div>`;
+  h+=`</div></div>`;
+
+  // Model usage
+  const u=stats.modelUsage||{};
+  if(Object.keys(u).length>0){
+    const mx=Math.max(...Object.values(u).map(x=>(x.inputTokens||0)+(x.outputTokens||0)),1);
+    h+=`<div class="section-title">Model Usage</div><div class="card"><div class="card-body">`;
+    for(const[model,v]of Object.entries(u)){
+      const tk=(v.inputTokens||0)+(v.outputTokens||0);const pct=(tk/mx)*100;
+      h+=`<div class="model-bar"><div class="model-hdr"><span class="model-name">${SM(model)}</span><span class="model-val">${FN(v.outputTokens||0)} out</span></div><div class="model-track"><div class="model-fill ${MC(model)}" style="width:${pct}%"></div></div></div>`;
+    }
+    h+=`</div></div>`;
+  }
+
+  // Hourly chart
+  const hc=stats.hourCounts||{};
+  if(Object.keys(hc).length>0){
+    const mh=Math.max(...Object.values(hc),1);
+    h+=`<div class="section-title">Hourly Activity</div><div class="card"><div class="card-body">`;
+    h+=`<div class="bar-chart">`;
+    for(let i=0;i<24;i++){const c=hc[String(i)]||0;h+=`<div class="bar" style="height:${Math.max((c/mh)*100,3)}%" title="${i}:00 - ${c}"></div>`}
+    h+=`</div><div class="bar-labels">`;
+    for(let i=0;i<24;i++)h+=`<div>${i%4===0?i:''}</div>`;
+    h+=`</div></div></div>`;
+  }
+
+  el.innerHTML=h;
+}
+
+/* ── Teams ── */
+function renderTeams(teams,tasks){
+  const el=document.getElementById('page-teams');
+  let h='';
+
+  // Task summary
+  if(tasks&&tasks.total>0){
+    h+=`<div class="section-title">Task Summary</div><div class="card"><div class="card-body">`;
+    h+=`<div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="stat-num g">${tasks.completed}</div><div class="stat-lbl">Done</div></div>
+      <div class="stat-card"><div class="stat-num o">${tasks.inProgress}</div><div class="stat-lbl">In Progress</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--t2)">${tasks.pending}</div><div class="stat-lbl">Pending</div></div>
+    </div></div></div>`;
+  }
+
+  if(!teams||teams.length===0){
+    if(!tasks||tasks.total===0)h+=`<div class="empty">No active teams</div>`;
+    el.innerHTML=h;
+    return;
+  }
+
+  for(const team of teams){
+    const activeN=team.members.filter(m=>m.active).length;
+    h+=`<div class="section-title">${E(team.name)}</div>`;
+    h+=`<div class="card team-card"><div class="card-hdr">
+      <div class="team-name">${E(team.name)}</div>
+      <div class="team-status">${activeN}/${team.memberCount} active</div>
+    </div>`;
+    if(team.description)h+=`<div class="team-desc">${E(team.description)}</div>`;
+
+    // Members
+    h+=`<div class="card-body">`;
+    const lead=team.members.find(m=>m.name===team.leadName)||team.members.find(m=>m.agentType==='team-lead');
+    const mates=team.members.filter(m=>m!==lead);
+
+    if(lead){
+      h+=`<div class="agent-node">
+        <div class="agent-avatar lead ${lead.active?'active':''}">${E(lead.name.charAt(0).toUpperCase())}</div>
+        <div class="agent-info">
+          <div class="agent-name">${E(lead.name)}</div>
+          <div class="agent-detail"><span>${SM(lead.model)}</span>${lead.inboxMessages>0?`<span style="color:var(--orange)">${lead.inboxMessages} msgs</span>`:''}</div>
+        </div>
+        <div class="agent-status ${lead.active?'on':'off'}">${lead.active?'ACTIVE':'idle'}</div>
+      </div>`;
+    }
+    for(const m of mates){
+      h+=`<div class="agent-node" style="${!m.active?'opacity:.6':''}">
+        <div class="agent-avatar mate ${m.active?'active':''}">${E(m.name.charAt(0).toUpperCase())}</div>
+        <div class="agent-info">
+          <div class="agent-name">${E(m.name)}</div>
+          <div class="agent-detail"><span>${SM(m.model)}</span>${m.inboxMessages>0?`<span style="color:var(--orange)">${m.inboxMessages} msgs</span>`:''}</div>
+        </div>
+        <div class="agent-status ${m.active?'on':'off'}">${m.active?'WORKING':'idle'}</div>
+      </div>`;
+    }
+    h+=`</div>`;
+
+    // Team tasks
+    if(team.tasks&&team.tasks.length>0){
+      h+=`<div class="card-body" style="border-top:1px solid var(--border)">`;
+      h+=`<div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Tasks</div>`;
+      for(const t of team.tasks.slice(0,10)){
+        const cls=t.status==='completed'?'done':t.status==='in_progress'?'prog':'pend';
+        h+=`<div class="task-item"><div class="task-dot ${cls}"></div><div class="task-text">${E(t.subject)}</div>${t.owner?`<div class="task-owner">${E(t.owner)}</div>`:''}</div>`;
+      }
+      if(team.tasks.length>10)h+=`<div style="text-align:center;font-size:11px;color:var(--t3);padding:6px">+${team.tasks.length-10} more</div>`;
+      h+=`</div>`;
+    }
+
+    // Messages
+    const msgs=(team.messageFlow||[]).filter(m=>m.type!=='idle');
+    if(msgs.length>0){
+      h+=`<div class="card-body" style="border-top:1px solid var(--border)">`;
+      h+=`<div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Messages</div>`;
+      for(const m of msgs.slice(0,6)){
+        const tc=m.type==='task'?'task':m.type==='idle'?'idle':'message';
+        h+=`<div class="msg-item">
+          <div class="msg-header">
+            <span class="msg-from">${E(m.from)}</span>
+            <span class="msg-arrow">&#10132;</span>
+            <span class="msg-to">${E(m.to)}</span>
+            <span class="msg-type ${tc}">${m.type}</span>
+          </div>
+          <div class="msg-text">${E(m.text)}</div>
+        </div>`;
+      }
+      h+=`</div>`;
+    }
+
+    h+=`</div>`;
+  }
+
+  el.innerHTML=h;
+}
+</script>
+</body>
+</html>
