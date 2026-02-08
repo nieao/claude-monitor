@@ -8,3 +8,8 @@ nul
 .venv/
 venv/
 bdd-testing-skill/
+node_modules/
+promo-video/node_modules/
+promo-video/dist/
+promo-video/chrome-headless-shell/
+promo-video/chrome-hs.zip
