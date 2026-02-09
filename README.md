@@ -19,26 +19,6 @@ Real-time monitoring dashboard for all your Claude Code sessions, agent teams, a
 - **Team Coordination** — Monitor team members, task assignments, inbox messages, and collaboration flows
 - **Mobile Dashboard** — Touch-friendly mobile UI with bottom tab navigation, auto-detected via User-Agent
 
-## Screenshots
-
-### Desktop Dashboard
-
-| Overview | Session Detail |
-|----------|---------------|
-| ![Overview](docs/screenshots/overview.png) | ![Session](docs/screenshots/session-detail.png) |
-
-### Agent Topology & Team Flow
-
-![Agent Topology](docs/screenshots/agent-topology.png)
-
-### Mobile
-
-| Overview | Projects | Stats |
-|----------|----------|-------|
-| ![Mobile Overview](docs/screenshots/mobile-overview.png) | ![Mobile Projects](docs/screenshots/mobile-projects.png) | ![Mobile Stats](docs/screenshots/mobile-stats.png) |
-
-> Screenshots above have project names and file paths blurred for privacy.
-
 ## Quick Start
 
 ### Prerequisites
