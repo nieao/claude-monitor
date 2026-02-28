@@ -7,13 +7,15 @@
 <style>
 :root{--bg-0:#0a0e14;--bg-1:#0d1117;--bg-2:#161b22;--bg-3:#1c2333;--border:#30363d;--t1:#e6edf3;--t2:#8b949e;--t3:#484f58;--blue:#58a6ff;--green:#3fb950;--orange:#d29922;--red:#f85149;--purple:#bc8cff;--teal:#39d2c0;--glow-g:rgba(63,185,80,.5);--glow-o:rgba(210,153,34,.4)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospace;background:var(--bg-0);color:var(--t1);min-height:100vh}
+body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospace;background:var(--bg-0);color:var(--t1);min-height:100vh;font-size:14px}
+.lang-btn{background:none;border:1px solid var(--border);color:var(--t2);font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s}
+.lang-btn:hover{border-color:var(--blue);color:var(--t1)}
 
 /* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--bg-2);position:sticky;top:0;z-index:100}
-.hdr-logo{font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-logo{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hdr-chips{display:flex;gap:16px;align-items:center}
-.chip{display:flex;align-items:center;gap:5px;font-size:11px}
+.chip{display:flex;align-items:center;gap:5px;font-size:13px}
 .chip-l{color:var(--t3)}.chip-v{color:var(--t1);font-weight:600}
 .chip-v.g{color:var(--green)}.chip-v.b{color:var(--blue)}.chip-v.o{color:var(--orange)}
 .hdr-r{display:flex;align-items:center;gap:14px}
@@ -25,7 +27,7 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 
 /* Filter */
 .fbar{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--bg-1)}
-.fbtn{padding:4px 14px;border-radius:14px;border:1px solid var(--border);background:0;color:var(--t2);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s}
+.fbtn{padding:4px 14px;border-radius:14px;border:1px solid var(--border);background:0;color:var(--t2);font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
 .fbtn:hover{border-color:var(--blue);color:var(--t1)}
 .fbtn.on{background:rgba(88,166,255,.15);border-color:var(--blue);color:var(--blue)}
 .finfo{margin-left:auto;font-size:11px;color:var(--t3)}
@@ -34,14 +36,14 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 .flow-section{border-bottom:1px solid var(--border);background:var(--bg-1)}
 .flow-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;cursor:pointer;user-select:none}
 .flow-hdr:hover{background:rgba(88,166,255,.03)}
-.flow-title{font-size:13px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.flow-title{font-size:15px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
 .flow-arrow{font-size:10px;transition:transform .2s}.flow-arrow.open{transform:rotate(90deg)}
 .flow-badge{font-size:10px;padding:2px 8px;border-radius:8px;background:rgba(88,166,255,.1);color:var(--blue)}
 .flow-body{display:none;padding:16px 20px}.flow-body.open{display:block}
 .flow-teams{display:flex;gap:20px;overflow-x:auto;padding-bottom:8px}
 
 /* Team Panel */
-.team-panel{min-width:500px;flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.team-panel{min-width:620px;flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .team-panel-hdr{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-3);display:flex;align-items:center;justify-content:space-between}
 .team-panel-name{font-size:13px;font-weight:600;color:var(--t1)}
 .team-panel-desc{font-size:10px;color:var(--t3);padding:6px 14px;border-bottom:1px solid rgba(48,54,61,.5)}
@@ -49,35 +51,67 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 
 /* Agent Topology */
 .topo{display:flex;flex-direction:column;align-items:center;gap:0}
-.topo-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.topo-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
 .topo-conn{display:flex;flex-direction:column;align-items:center;padding:4px 0;color:var(--t3)}
 .topo-line{width:2px;height:14px;background:var(--border)}
 .topo-lbl{font-size:9px;padding:2px 6px;white-space:nowrap}
+.topo-arrows{display:flex;justify-content:center;gap:40px;padding:2px 0;color:var(--t3);font-size:9px}
+.topo-arrows span{display:flex;flex-direction:column;align-items:center}
+.topo-arrows .arr-down{width:2px;height:12px;background:var(--border)}
 
-/* Agent Node */
-.anode{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 14px;border-radius:8px;border:2px solid var(--border);background:var(--bg-3);min-width:110px;position:relative;transition:all .4s}
-.anode.lead{background:#2a1a1a;border-color:#8b4c4c;min-width:140px}
-.anode.mate{background:#1a2a3a;border-color:#4c6b8b}
-.anode.active{box-shadow:0 0 16px var(--glow-g);border-color:var(--green)!important}
-.anode.active::before{content:'';position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--glow-g);animation:pn 1.5s ease-in-out infinite}
+/* Agent Card (rich node) */
+.acard{border-radius:10px;border:2px solid var(--border);background:var(--bg-3);min-width:180px;max-width:260px;position:relative;transition:all .4s;cursor:pointer;overflow:hidden}
+.acard:hover{border-color:var(--blue);box-shadow:0 0 12px rgba(88,166,255,.15)}
+.acard.lead{background:linear-gradient(180deg,#2a1a1a,var(--bg-3));border-color:#8b4c4c;min-width:280px;max-width:380px}
+.acard.mate{background:linear-gradient(180deg,#1a2a3a,var(--bg-3));border-color:#4c6b8b}
+.acard.active{box-shadow:0 0 16px var(--glow-g);border-color:var(--green)!important}
+.acard.active::before{content:'';position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--glow-g);animation:pn 1.5s ease-in-out infinite}
 @keyframes pn{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
-.anode-name{font-size:11px;font-weight:600;color:var(--t1)}
-.anode-meta{font-size:9px;color:var(--t2)}
-.anode-model{font-size:9px;color:var(--purple);opacity:.8}
-.anode-msgs{font-size:9px;color:var(--orange)}
+.acard-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid rgba(48,54,61,.4)}
+.acard-name{font-size:14px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:6px}
+.acard-role{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:500;white-space:nowrap}
+.acard-role.lead-r{background:rgba(248,81,73,.12);color:var(--red)}
+.acard-role.mate-r{background:rgba(88,166,255,.12);color:var(--blue)}
+.acard-status{font-size:9px;font-weight:600;display:flex;align-items:center;gap:4px}
+.acard-status .sd{width:6px;height:6px;border-radius:50%}
+.acard-status.on{color:var(--green)}.acard-status.on .sd{background:var(--green);box-shadow:0 0 4px var(--glow-g);animation:pulse 2s ease-in-out infinite}
+.acard-status.off{color:var(--t3)}.acard-status.off .sd{background:var(--t3)}
+.acard-body{padding:8px 12px}
+.acard-desc{font-size:12px;color:var(--t2);margin-bottom:6px;line-height:1.4}
+.acard-model{font-size:9px;color:var(--purple);opacity:.8;margin-bottom:6px}
+.acard-section{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;margin-top:4px}
+.acard-tasks{display:flex;flex-direction:column;gap:3px}
+.acard-task{display:flex;align-items:center;gap:5px;font-size:12px;line-height:1.3;padding:2px 0}
+.acard-task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.acard-task-dot.done{background:var(--green)}.acard-task-dot.prog{background:var(--orange)}.acard-task-dot.pend{background:var(--t3)}
+.acard-task-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t2)}
+.acard-task-text.done{color:var(--t3);text-decoration:line-through}
+.acard-footer{display:flex;gap:6px;padding:6px 12px;border-top:1px solid rgba(48,54,61,.4);flex-wrap:wrap}
+.acard-tag{font-size:8px;padding:2px 7px;border-radius:4px;display:flex;align-items:center;gap:3px}
+.acard-tag.msgs{background:rgba(210,153,34,.1);color:var(--orange)}
+.acard-tag.model{background:rgba(188,140,255,.1);color:var(--purple)}
+.acard-tag.inbox{background:rgba(88,166,255,.08);color:var(--blue)}
+.acard-notask{font-size:11px;color:var(--t3);font-style:italic;padding:2px 0}
 
-/* Task List Node */
-.tnode{padding:8px 14px;border-radius:8px;border:2px solid var(--teal);background:rgba(57,210,192,.06);display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:420px}
-.tnode-title{width:100%;text-align:center;font-size:10px;font-weight:600;color:var(--teal);margin-bottom:2px}
-.tnode-item{font-size:8px;padding:2px 6px;border-radius:4px;border:1px solid rgba(48,54,61,.5);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tnode-item.done{color:var(--green);border-color:rgba(63,185,80,.3)}
-.tnode-item.prog{color:var(--orange);border-color:rgba(210,153,34,.3)}
-.tnode-item.pend{color:var(--t3);border-color:var(--border)}
+/* Shared Task List */
+.topo-layout{display:flex;gap:16px;align-items:flex-start}
+.topo-main{flex:1;display:flex;flex-direction:column;align-items:center;gap:0}
+.tnode{padding:10px 14px;border-radius:10px;border:2px solid var(--teal);background:rgba(57,210,192,.06);min-width:180px;max-width:420px;width:100%}
+.tnode-title{font-size:12px;font-weight:600;color:var(--teal);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.tnode-stats{font-size:9px;color:var(--t3);margin-bottom:6px;display:flex;gap:8px}
+.tnode-stats span{display:flex;align-items:center;gap:3px}
+.tnode-item{font-size:11px;padding:3px 0;display:flex;align-items:center;gap:5px;border-bottom:1px solid rgba(48,54,61,.2)}
+.tnode-item:last-child{border-bottom:none}
+.tnode-item .td{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.tnode-item .td.done{background:var(--green)}.tnode-item .td.prog{background:var(--orange)}.tnode-item .td.pend{background:var(--t3)}
+.tnode-item .tt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t2)}
+.tnode-item .tt.done{color:var(--t3);text-decoration:line-through}
+.tnode-item .to{font-size:8px;color:var(--t3);flex-shrink:0}
 
 /* Message Flow */
 .msg-flow{margin-top:12px;border-top:1px solid var(--border);padding-top:8px}
 .msg-flow-title{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.msg-item{display:flex;gap:6px;padding:3px 0;font-size:10px;border-bottom:1px solid rgba(48,54,61,.2)}
+.msg-item{display:flex;gap:6px;padding:3px 0;font-size:12px;border-bottom:1px solid rgba(48,54,61,.2)}
 .msg-item:last-child{border-bottom:none}
 .msg-from{color:var(--blue);font-weight:500;min-width:80px}
 .msg-arrow{color:var(--t3)}
@@ -97,7 +131,7 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 .pc.act{border-color:var(--green);box-shadow:0 0 20px rgba(63,185,80,.1)}
 .pc.rec{border-color:var(--orange)}
 .pc-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-3)}
-.pc-name{font-size:13px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:6px}
+.pc-name{font-size:15px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:6px}
 .pc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .pc-dot.active{background:var(--green);animation:pulse 2s ease-in-out infinite}
 .pc-dot.recent{background:var(--orange)}.pc-dot.idle{background:var(--t3)}
@@ -119,27 +153,27 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 .ss-dot.recent{background:var(--orange);box-shadow:0 0 4px var(--glow-o)}
 .ss-dot.idle{background:var(--t3)}
 @keyframes ps{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
-.ss-id{font-size:11px;font-weight:600;color:var(--t2)}
+.ss-id{font-size:13px;font-weight:600;color:var(--t2)}
 .ss-model{font-size:10px;color:var(--purple)}
 .ss-branch{font-size:10px;color:var(--teal)}
 .ss-slug{font-size:10px;color:var(--t3);font-style:italic}
 .ss-age{margin-left:auto;font-size:10px;color:var(--t3);font-variant-numeric:tabular-nums}
-.ss-sum{font-size:11px;color:var(--t2);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ss-prompt{font-size:11px;color:var(--t1);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8}
-.ss-met{display:flex;gap:12px;margin:3px 0 0 15px;font-size:10px;color:var(--t3)}
+.ss-sum{font-size:13px;color:var(--t2);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ss-prompt{font-size:13px;color:var(--t1);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8}
+.ss-met{display:flex;gap:12px;margin:3px 0 0 15px;font-size:12px;color:var(--t3)}
 .ss-met span{display:flex;align-items:center;gap:3px}.ss-met .v{color:var(--t2);font-weight:500}
-.ss-tool{margin:3px 0 0 15px;font-size:10px;color:var(--orange);display:flex;align-items:center;gap:4px}
+.ss-tool{margin:3px 0 0 15px;font-size:12px;color:var(--orange);display:flex;align-items:center;gap:4px}
 .ss-tok{display:flex;gap:10px;margin:2px 0 0 15px;font-size:9px;color:var(--t3)}
 
 /* ── Sub-conversation Window ── */
 .convo{margin:6px 10px 4px;border:1px solid var(--border);border-radius:8px;background:var(--bg-0);overflow:hidden}
-.convo-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:var(--bg-3);cursor:pointer;user-select:none;font-size:10px;color:var(--t2)}
+.convo-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:var(--bg-3);cursor:pointer;user-select:none;font-size:12px;color:var(--t2)}
 .convo-hdr:hover{background:rgba(88,166,255,.05)}
 .convo-arr{font-size:8px;transition:transform .2s}.convo-arr.open{transform:rotate(90deg)}
 .convo-body{display:none;padding:6px 0;max-height:300px;overflow-y:auto}
 .convo-body.open{display:block}
 .convo-body::-webkit-scrollbar{width:3px}.convo-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.cv{display:flex;gap:6px;padding:3px 10px;font-size:10px;line-height:1.4}
+.cv{display:flex;gap:6px;padding:3px 10px;font-size:12px;line-height:1.4}
 .cv-role{flex-shrink:0;width:14px;height:14px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;margin-top:1px}
 .cv-role.u{background:rgba(88,166,255,.2);color:var(--blue)}
 .cv-role.a{background:rgba(188,140,255,.2);color:var(--purple)}
@@ -160,11 +194,11 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 @media(max-width:1100px){.bot{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.bot{grid-template-columns:1fr}}
 .bc{background:var(--bg-2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.bc-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-3);font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.bc-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-3);font-size:14px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
 .bc-b{font-size:10px;padding:2px 8px;border-radius:8px;background:rgba(88,166,255,.1);color:var(--blue);font-weight:400;text-transform:none;letter-spacing:0}
 .bc-body{padding:12px 14px;max-height:300px;overflow-y:auto}
 .bc-body::-webkit-scrollbar{width:3px}.bc-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.sr{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(48,54,61,.3)}
+.sr{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid rgba(48,54,61,.3)}
 .sr:last-child{border-bottom:none}.sr-l{color:var(--t3)}.sr-v{color:var(--t1);font-weight:500}
 .mb{margin-bottom:8px}.mb-h{display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px}
 .mb-n{color:var(--t2)}.mb-v{color:var(--t3);font-variant-numeric:tabular-nums}
@@ -175,48 +209,356 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 .mb-f.haiku{background:linear-gradient(90deg,#238636,#3fb950)}
 .ai{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(48,54,61,.3)}.ai:last-child{border-bottom:none}
 .ai-t{font-size:10px;color:var(--t3);min-width:55px;font-variant-numeric:tabular-nums}
-.ai-x{font-size:11px;color:var(--t2);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ai-x{font-size:13px;color:var(--t2);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .ai-p{font-size:9px;color:var(--blue);opacity:.7}
 .hc{display:flex;align-items:flex-end;gap:1px;height:50px;margin-top:8px}
 .hb{flex:1;background:var(--blue);opacity:.5;border-radius:1px 1px 0 0;min-width:3px;transition:height .5s}.hb:hover{opacity:1}
 .hl{display:flex;gap:1px;margin-top:2px}.hl>div{flex:1;text-align:center;font-size:7px;color:var(--t3)}
-.empty{color:var(--t3);font-size:12px;text-align:center;padding:24px}
-@media(max-width:500px){.pgrid{grid-template-columns:1fr}.hdr-chips{display:none}}
+.empty{color:var(--t3);font-size:14px;text-align:center;padding:24px}
+
+/* ── Inbox Modal ── */
+.inbox-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.inbox-overlay.open{display:flex}
+.inbox-panel{width:560px;max-width:92vw;max-height:80vh;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.inbox-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg-3);border-bottom:1px solid var(--border)}
+.inbox-title{font-size:14px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px}
+.inbox-close{background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:4px}
+.inbox-close:hover{color:var(--t1);background:rgba(255,255,255,.05)}
+.inbox-msgs{flex:1;overflow-y:auto;padding:8px 0;min-height:120px;max-height:50vh}
+.inbox-msgs::-webkit-scrollbar{width:4px}.inbox-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.inbox-msg{display:flex;gap:8px;padding:8px 16px;font-size:13px;border-bottom:1px solid rgba(48,54,61,.2)}
+.inbox-msg:last-child{border-bottom:none}
+.inbox-msg-from{color:var(--blue);font-weight:600;min-width:90px;flex-shrink:0}
+.inbox-msg-from.human{color:var(--green)}
+.inbox-msg-body{flex:1;min-width:0}
+.inbox-msg-text{color:var(--t2);word-break:break-word;line-height:1.4}
+.inbox-msg-meta{display:flex;gap:8px;margin-top:3px;font-size:9px;color:var(--t3)}
+.inbox-msg-type{font-size:8px;padding:1px 6px;border-radius:3px;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.inbox-msg-type.message{background:rgba(88,166,255,.1);color:var(--blue)}
+.inbox-msg-type.task{background:rgba(210,153,34,.15);color:var(--orange)}
+.inbox-msg-type.idle{background:rgba(72,79,88,.2);color:var(--t3)}
+.inbox-msg-type.shutdown{background:rgba(248,81,73,.15);color:var(--red)}
+.inbox-send{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:var(--bg-3)}
+.inbox-input{flex:1;background:var(--bg-0);border:1px solid var(--border);border-radius:6px;color:var(--t1);font-family:inherit;font-size:14px;padding:8px 10px;resize:none;outline:none;min-height:36px;max-height:80px}
+.inbox-input:focus{border-color:var(--blue)}
+.inbox-input::placeholder{color:var(--t3)}
+.inbox-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;align-self:flex-end}
+.inbox-btn:hover{opacity:.9}.inbox-btn:disabled{opacity:.4;cursor:not-allowed}
+.inbox-empty{text-align:center;padding:24px;color:var(--t3);font-size:12px}
+.inbox-loading{text-align:center;padding:24px;color:var(--t3);font-size:12px}
+
+/* Agent nodes (placeholder architecture diagram) */
+.anode{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 14px;border-radius:8px;border:2px solid var(--border);background:var(--bg-3);min-width:110px;position:relative;transition:all .4s}
+.anode.lead{background:#2a1a1a;border-color:#8b4c4c;min-width:140px}
+.anode.mate{background:#1a2a3a;border-color:#4c6b8b}
+.anode.active{box-shadow:0 0 16px var(--glow-g);border-color:var(--green)!important}
+.anode.active::before{content:'';position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--glow-g);animation:pn 1.5s ease-in-out infinite}
+.anode-name{font-size:11px;font-weight:600;color:var(--t1)}
+.anode-meta{font-size:9px;color:var(--t2)}
+.anode-model{font-size:9px;color:var(--purple);opacity:.8}
+.anode-msgs{font-size:9px;color:var(--orange)}
+.anode.clickable{cursor:pointer;transition:all .3s}
+.anode.clickable:hover{border-color:var(--blue);box-shadow:0 0 12px rgba(88,166,255,.2)}
+
+/* ── Keyword Highlights ── */
+.hl-task{color:var(--blue);font-weight:600}
+.hl-done{color:var(--green);font-weight:600}
+.hl-prog{color:var(--orange);font-weight:500}
+.hl-pend{color:var(--t2);font-style:italic}
+.hl-tool{color:var(--purple);font-weight:500}
+.hl-team{color:var(--teal);font-weight:500}
+.hl-err{color:var(--red);font-weight:600}
+
+/* ── Lead Pie Chart + Countdown ── */
+.lead-pie{display:flex;align-items:center;gap:14px;padding:10px 12px;border-bottom:1px solid rgba(48,54,61,.4);background:rgba(63,185,80,.03)}
+.pie{width:56px;height:56px;border-radius:50%;position:relative;flex-shrink:0;transition:background .8s}
+.pie-hole{position:absolute;top:8px;left:8px;right:8px;bottom:8px;border-radius:50%;background:var(--bg-3);display:flex;align-items:center;justify-content:center}
+.pie-pct{font-size:13px;font-weight:800;color:var(--green);line-height:1}
+.pie-info{flex:1;min-width:0}
+.pie-main{font-size:13px;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:6px}
+.pie-legend{display:flex;gap:8px;margin-top:4px}
+.pie-legend-i{font-size:9px;display:flex;align-items:center;gap:3px;color:var(--t3)}
+.pie-legend-d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pie-eta{display:flex;align-items:center;gap:5px;margin-top:4px}
+.pie-eta-icon{font-size:12px;color:var(--teal)}
+.pie-eta-time{font-size:14px;font-weight:700;color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.pie-eta-label{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
+.pie-alldone{font-size:12px;color:var(--green);font-weight:600;margin-top:4px;display:flex;align-items:center;gap:4px}
+
+/* ── Agent Current Task Banner ── */
+.acard-current{padding:8px 12px;background:linear-gradient(90deg,rgba(210,153,34,.12),rgba(210,153,34,.04));border-bottom:2px solid rgba(210,153,34,.3);display:flex;align-items:center;gap:8px}
+.acard-current-spinner{width:12px;height:12px;border:2px solid rgba(210,153,34,.3);border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0}
+.acard-current-label{font-size:9px;color:var(--orange);text-transform:uppercase;letter-spacing:.5px;font-weight:700;white-space:nowrap}
+.acard-current-text{font-size:13px;color:var(--orange);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-shadow:0 0 12px rgba(210,153,34,.3)}
+.acard-current-form{font-size:10px;color:var(--t1);background:rgba(210,153,34,.15);padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+
+/* ── Agent Progress Bar ── */
+.aprog{height:4px;background:var(--bg-0);border-radius:2px;margin:8px 12px 0;overflow:hidden}
+.aprog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .8s}
+.aprog-label{font-size:9px;color:var(--t3);padding:2px 12px 0;display:flex;justify-content:space-between}
+.aprog-label .v{color:var(--green);font-weight:600}
+
+/* ── Agent Reasoning Terminal ── */
+.areason{margin:6px 12px 8px;background:var(--bg-0);border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:180px}
+.areason-hdr{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:4px 8px;border-bottom:1px solid rgba(48,54,61,.4);display:flex;align-items:center;gap:4px}
+.areason-hdr .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+.areason-body{padding:4px 0;max-height:150px;overflow-y:auto;font-size:11px;line-height:1.5}
+.areason-body::-webkit-scrollbar{width:2px}.areason-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:1px}
+.areason-line{padding:2px 8px;color:var(--t2);border-left:2px solid transparent;word-break:break-word}
+.areason-line:hover{background:rgba(88,166,255,.03);border-left-color:var(--blue)}
+.areason-line .prefix{color:var(--teal);margin-right:4px;user-select:none}
+.areason-tools{display:flex;gap:3px;flex-wrap:wrap;padding:2px 8px}
+.areason-tool{font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(188,140,255,.1);color:var(--purple)}
+.areason-activity{padding:4px 8px;font-size:11px;display:flex;align-items:center;gap:6px}
+.areason-activity .spinner{width:10px;height:10px;border:2px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.areason-activity .act-text{color:var(--orange);font-weight:500}
+
+/* ── Enhanced Communication Flow ── */
+.comm-flow{margin-top:12px;border-top:1px solid var(--border);padding-top:8px}
+.comm-flow-hdr{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.comm-flow-hdr .fl{flex:1;height:1px;background:var(--border)}
+.comm-entry{display:flex;align-items:flex-start;gap:0;margin-bottom:8px;position:relative;padding-left:10px}
+.comm-entry::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+.comm-entry.task::before{background:var(--orange)}
+.comm-entry.shutdown::before{background:var(--red)}
+.comm-agents{display:flex;align-items:center;gap:4px;min-width:220px;flex-shrink:0}
+.comm-from-name{font-size:12px;font-weight:600;color:var(--blue);min-width:85px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.comm-arrow-vis{display:flex;align-items:center;width:40px;height:16px;position:relative;flex-shrink:0}
+.comm-arrow-vis .al{position:absolute;top:7px;left:2px;right:8px;height:2px;border-radius:1px}
+.comm-arrow-vis .al.msg{background:linear-gradient(90deg,var(--blue),var(--teal))}
+.comm-arrow-vis .al.task{background:linear-gradient(90deg,var(--orange),var(--teal))}
+.comm-arrow-vis .al.shutdown{background:linear-gradient(90deg,var(--red),var(--teal))}
+.comm-arrow-vis .ah{position:absolute;right:2px;top:4px;width:0;height:0;border-left:6px solid var(--teal);border-top:4px solid transparent;border-bottom:4px solid transparent}
+.comm-to-name{font-size:12px;font-weight:500;color:var(--teal);min-width:85px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.comm-body{flex:1;min-width:0;padding-left:8px}
+.comm-text{font-size:11px;color:var(--t2);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.comm-meta{display:flex;gap:6px;margin-top:2px;font-size:8px;color:var(--t3)}
+.comm-type-badge{font-size:8px;padding:1px 5px;border-radius:3px}
+.comm-type-badge.message{background:rgba(88,166,255,.1);color:var(--blue)}
+.comm-type-badge.task{background:rgba(210,153,34,.15);color:var(--orange)}
+.comm-type-badge.shutdown{background:rgba(248,81,73,.15);color:var(--red)}
+
+/* ── Team Progress Bar ── */
+.team-prog{padding:6px 14px 0}
+.team-prog-bar{height:6px;background:var(--bg-0);border-radius:3px;overflow:hidden;display:flex}
+.team-prog-done{background:var(--green);border-radius:3px 0 0 3px;transition:width .8s}
+.team-prog-wip{background:var(--orange);transition:width .8s}
+.team-prog-info{font-size:8px;color:var(--t3);margin-top:2px;display:flex;gap:8px}
+
+@media(max-width:500px){.pgrid{grid-template-columns:1fr}.hdr-chips{display:none}.comm-agents{min-width:160px}.comm-from-name,.comm-to-name{min-width:60px;font-size:10px}}
+
+/* ── REC Button ── */
+.rec-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);color:var(--t2);font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s;position:relative}
+.rec-btn:hover{border-color:var(--red);color:var(--t1)}
+.rec-btn.active{border-color:var(--red);color:var(--red);background:rgba(248,81,73,.08)}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:all .3s}
+.rec-btn.active .rec-dot{background:var(--red);animation:rec-pulse 1.2s ease-in-out infinite}
+@keyframes rec-pulse{0%,100%{opacity:1;box-shadow:0 0 4px rgba(248,81,73,.6)}50%{opacity:.4;box-shadow:0 0 10px rgba(248,81,73,.8)}}
+.rec-time{font-size:10px;color:var(--red);font-variant-numeric:tabular-nums;margin-left:2px}
+
+/* ── Recording Management Modal ── */
+.rec-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.rec-overlay.open{display:flex}
+.rec-panel{width:680px;max-width:92vw;max-height:85vh;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.rec-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg-3);border-bottom:1px solid var(--border)}
+.rec-title{font-size:14px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px}
+.rec-close{background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:4px}
+.rec-close:hover{color:var(--t1);background:rgba(255,255,255,.05)}
+.rec-body{flex:1;overflow-y:auto;padding:12px 16px;max-height:65vh}
+.rec-body::-webkit-scrollbar{width:4px}.rec-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* Recording Item */
+.rec-item{background:var(--bg-3);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.rec-item:hover{border-color:var(--blue)}
+.rec-item-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px}
+.rec-item-id{font-size:13px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:6px}
+.rec-item-status{font-size:10px;padding:2px 8px;border-radius:8px}
+.rec-item-status.recording{background:rgba(248,81,73,.15);color:var(--red)}
+.rec-item-status.completed{background:rgba(63,185,80,.15);color:var(--green)}
+.rec-item-meta{display:flex;gap:12px;padding:0 14px 8px;font-size:11px;color:var(--t3)}
+.rec-item-meta .v{color:var(--t2);font-weight:500}
+.rec-item-actions{display:flex;gap:6px;padding:8px 14px;border-top:1px solid var(--border);background:var(--bg-2);flex-wrap:wrap}
+.rec-action{font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--t2);cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:4px}
+.rec-action:hover{border-color:var(--blue);color:var(--blue);background:rgba(88,166,255,.05)}
+.rec-action:disabled{opacity:.4;cursor:not-allowed}
+.rec-action.primary{background:rgba(88,166,255,.1);border-color:var(--blue);color:var(--blue)}
+.rec-item-files{display:flex;gap:6px;padding:6px 14px;flex-wrap:wrap}
+.rec-file-link{font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(63,185,80,.1);color:var(--green);text-decoration:none;cursor:pointer;transition:all .2s}
+.rec-file-link:hover{background:rgba(63,185,80,.2)}
+.rec-empty{text-align:center;padding:24px;color:var(--t3);font-size:12px}
+.rec-status-bar{padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(248,81,73,.04);display:flex;align-items:center;gap:10px;font-size:12px}
+.rec-status-bar .rec-dot-lg{width:10px;height:10px;border-radius:50%;background:var(--red);animation:rec-pulse 1.2s ease-in-out infinite;flex-shrink:0}
+.rec-status-bar .info{color:var(--t2);flex:1}.rec-status-bar .val{color:var(--t1);font-weight:600}
 </style>
 </head>
 <body>
 <div class="hdr">
   <div class="hdr-logo">Claude Code Monitor</div>
   <div class="hdr-chips" id="hdrC"></div>
-  <div class="hdr-r"><div class="clock" id="clk"></div><div class="ws-s" id="ws"><div class="ws-d"></div><span id="wst">LIVE</span></div></div>
+  <div class="hdr-r"><button class="rec-btn" id="recBtn" onclick="toggleRecording()" oncontextmenu="event.preventDefault();openRecMgmt()"><span class="rec-dot"></span><span id="recLabel">REC</span><span class="rec-time" id="recTime" style="display:none"></span></button><button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button><div class="clock" id="clk"></div><div class="ws-s" id="ws"><div class="ws-d"></div><span id="wst">LIVE</span></div></div>
+</div>
+
+<!-- Inbox Modal -->
+<div class="inbox-overlay" id="inboxOverlay" onclick="if(event.target===this)closeInbox()">
+  <div class="inbox-panel">
+    <div class="inbox-hdr">
+      <div class="inbox-title"><span id="inboxTitle">Inbox</span></div>
+      <button class="inbox-close" onclick="closeInbox()">&times;</button>
+    </div>
+    <div class="inbox-msgs" id="inboxMsgs"><div class="inbox-loading">Loading...</div></div>
+    <div class="inbox-send">
+      <textarea class="inbox-input" id="inboxInput" placeholder="" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+      <button class="inbox-btn" id="inboxBtn" onclick="sendMsg()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Recording Management Modal -->
+<div class="rec-overlay" id="recOverlay" onclick="if(event.target===this)closeRecMgmt()">
+  <div class="rec-panel">
+    <div class="rec-hdr">
+      <div class="rec-title"><span id="recMgmtTitle">Recording Management</span></div>
+      <button class="rec-close" onclick="closeRecMgmt()">&times;</button>
+    </div>
+    <div id="recStatusBar"></div>
+    <div class="rec-body" id="recBody"><div class="rec-empty">Loading...</div></div>
+  </div>
 </div>
 
 <!-- Agent Flow Section -->
 <div class="flow-section">
   <div class="flow-hdr" onclick="toggleFlow()">
-    <div class="flow-title"><span class="flow-arrow" id="flowArr">&#9654;</span> Agent Topology & Flow</div>
+    <div class="flow-title"><span class="flow-arrow" id="flowArr">&#9654;</span> <span id="flowTitleText"></span></div>
     <span class="flow-badge" id="flowBdg">--</span>
   </div>
   <div class="flow-body" id="flowBody"></div>
 </div>
 
 <div class="fbar">
-  <button class="fbtn on" data-f="active" onclick="setF('active')">Active</button>
-  <button class="fbtn" data-f="recent" onclick="setF('recent')">Recent</button>
-  <button class="fbtn" data-f="all" onclick="setF('all')">All Projects</button>
+  <button class="fbtn on" data-f="active" onclick="setF('active')" id="fActive"></button>
+  <button class="fbtn" data-f="recent" onclick="setF('recent')" id="fRecent"></button>
+  <button class="fbtn" data-f="all" onclick="setF('all')" id="fAll"></button>
   <div class="finfo" id="finfo"></div>
 </div>
 
 <div class="main"><div class="pgrid" id="pgrid"></div></div>
 
 <div class="bot">
-  <div class="bc"><div class="bc-h">Stats <span class="bc-b" id="stB">--</span></div><div class="bc-body" id="stD"></div></div>
-  <div class="bc"><div class="bc-h">Activity <span class="bc-b" id="acB">--</span></div><div class="bc-body" id="acD"></div></div>
-  <div class="bc"><div class="bc-h">Teams & Tasks <span class="bc-b" id="ttB">--</span></div><div class="bc-body" id="ttD"></div></div>
+  <div class="bc"><div class="bc-h"><span id="stH"></span> <span class="bc-b" id="stB">--</span></div><div class="bc-body" id="stD"></div></div>
+  <div class="bc"><div class="bc-h"><span id="acH"></span> <span class="bc-b" id="acB">--</span></div><div class="bc-body" id="acD"></div></div>
+  <div class="bc"><div class="bc-h"><span id="ttH"></span> <span class="bc-b" id="ttB">--</span></div><div class="bc-body" id="ttD"></div></div>
 </div>
 
 <script>
 let D=null,CF='active',EI={},EC={},flowOpen=true;
+// ── i18n ──
+const I={
+zh:{
+title:'Claude Code 监控面板',proj:'项目',active:'活跃',recent:'最近',sess:'会话',msgs:'消息',
+live:'在线',offline:'离线',
+flowTitle:'Agent 拓扑与消息流',noTeam:'无团队',
+subArch:'子代理架构',teamArch:'团队架构',mainAgent:'总指挥',
+spawns:'分派子代理',search:'搜索',exec:'执行',design:'设计',code:'编码',
+taskType:'Task(子代理类型)',retResult:'返回结果',
+eachSub:'每个子代理独立干活，完事把结果交回来',
+teamLead:'老张',coord:'调度',sharedTasks:'共享任务列表',
+tInProg:'任务 #1 (进行中)',tPend:'任务 #2 (待处理)',tDone:'任务 #3 (完成)',
+wA:'小李',wB:'小王',wC:'小赵',
+coding:'编码',testing:'测试',research:'研究',
+delegate:'队长',activeS:'活跃',idle:'空闲',working:'工作中',
+leadDesc:'拆解任务，分配给队员干活',
+ownedTasks:'负责任务',assignedTasks:'分配任务',
+noTasks:'暂无分配任务',clickInbox:'点击打开收件箱',inbox:'收件箱',
+spawnAssign:'分派任务',reportBack:'汇报结果 (邮箱)',
+recentMsgs:'最近消息 (邮箱)',
+done:'完成',inProg:'进行中',pend:'待处理',more:'更多',
+allProj:'全部项目',noProj:'暂无项目',
+total:'总计',bytes:'字节',now:'正在进行',ago:'前',
+idleSess:'个空闲会话',noSess:'暂无会话',convo:'对话',
+stats:'统计',activity:'活动',teamsTask:'团队 & 任务',
+totalSess:'总会话数',totalMsgs:'总消息数',
+since:'起始时间',longest:'最长会话',
+todayMsgs:'今日消息',todayTools:'今日工具',
+tasks:'任务',hourly:'按小时',
+noAct:'暂无活动',noTeamTask:'暂无团队或任务',
+team:'团队',teams:'团队',none:'无',
+loading:'加载中...',noMsg:'暂无消息',
+failLoad:'加载失败',sendPH:'以 human-operator 身份发送消息...',send:'发送',
+reasoning:'推理过程',commFlow:'通信线路',taskProg:'任务进度',
+activeLabel:'在线',tokIn:'输入:',tokOut:'输出:',tokCache:'缓存:',outLabel:'输出',currentTask:'当前任务',
+etaLabel:'预计剩余',estimating:'估算中...',allDone:'全部完成!',overallProg:'总进度',
+recording:'记录中...',overtime:'已超时',elapsed:'已用时',avgTask:'平均耗时',noHistory:'暂无历史',
+recBtn:'REC',recStart:'开始录制',recStop:'停止录制',recMgmt:'录制管理',
+recGenDocs:'生成文档',recSummary:'阶段总结',recGenSkill:'生成 Skill',
+recNoRecordings:'暂无录制记录',recDuration:'时长',recSessions:'捕获会话',
+recEntries:'捕获条目',recGenerating:'生成中...',recDownload:'下载',
+recActive:'录制中',recCompleted:'已完成',recFiles:'已生成文件',
+recTaskRunning:'任务执行中...',recTaskDone:'完成',recTaskError:'失败',
+projSessions:'会话',projLead:'主会话',projMates:'子会话',
+},
+en:{
+title:'Claude Code Monitor',proj:'Projects',active:'Active',recent:'Recent',sess:'Sessions',msgs:'Msgs',
+live:'LIVE',offline:'OFFLINE',
+flowTitle:'Agent Topology & Flow',noTeam:'No Team',
+subArch:'Subagent Architecture',teamArch:'Team Architecture',mainAgent:'Main Agent',
+spawns:'spawns subagents',search:'search',exec:'execute',design:'design',code:'code',
+taskType:'Task(subagent_type)',retResult:'return result',
+eachSub:'Each subagent runs independently, returns result to parent',
+teamLead:'Team Lead',coord:'coordinates',sharedTasks:'Shared Task List',
+tInProg:'task #1 (in progress)',tPend:'task #2 (pending)',tDone:'task #3 (done)',
+wA:'Worker A',wB:'Worker B',wC:'Worker C',
+coding:'coding',testing:'testing',research:'research',
+delegate:'Delegate Mode',activeS:'ACTIVE',idle:'idle',working:'WORKING',
+leadDesc:'Analyze, split & assign tasks to teammates',
+ownedTasks:'Owned Tasks',assignedTasks:'Assigned Tasks',
+noTasks:'No tasks assigned',clickInbox:'click to open inbox',inbox:'inbox',
+spawnAssign:'spawn & assign',reportBack:'report back (Mailbox)',
+recentMsgs:'Recent Messages (Mailbox)',
+done:'done',inProg:'in progress',pend:'pending',more:'more',
+allProj:'All Projects',noProj:'No projects',
+total:'total',bytes:'bytes',now:'now',ago:'ago',
+idleSess:'idle sessions',noSess:'No sessions',convo:'Conversation',
+stats:'Stats',activity:'Activity',teamsTask:'Teams & Tasks',
+totalSess:'Total Sessions',totalMsgs:'Total Messages',
+since:'Since',longest:'Longest',
+todayMsgs:'Today Msgs',todayTools:'Today Tools',
+tasks:'Tasks',hourly:'Hourly',
+noAct:'No activity',noTeamTask:'No teams or tasks',
+team:'team',teams:'teams',none:'none',
+loading:'Loading...',noMsg:'No messages',
+failLoad:'Failed to load',sendPH:'Send message as human-operator...',send:'Send',
+reasoning:'Reasoning',commFlow:'Communication Flow',taskProg:'Task Progress',
+activeLabel:'active',tokIn:'in:',tokOut:'out:',tokCache:'cache:',outLabel:'out',currentTask:'Current Task',
+etaLabel:'ETA',estimating:'Estimating...',allDone:'All Done!',overallProg:'Overall',
+recording:'Recording...',overtime:'Overtime',elapsed:'Elapsed',avgTask:'Avg Task',noHistory:'No history',
+recBtn:'REC',recStart:'Start',recStop:'Stop',recMgmt:'Recordings',
+recGenDocs:'Gen Docs',recSummary:'Summarize',recGenSkill:'Gen Skill',
+recNoRecordings:'No recordings',recDuration:'Duration',recSessions:'Sessions',
+recEntries:'Entries',recGenerating:'Generating...',recDownload:'Download',
+recActive:'Recording',recCompleted:'Completed',recFiles:'Files',
+recTaskRunning:'Running...',recTaskDone:'Done',recTaskError:'Failed',
+projSessions:'Sessions',projLead:'Main Session',projMates:'Sub Sessions',
+}
+};
+let curLang=localStorage.getItem('monitor-lang')||'zh';
+function T(k){return I[curLang][k]||I.en[k]||k}
+function toggleLang(){curLang=curLang==='zh'?'en':'zh';localStorage.setItem('monitor-lang',curLang);applyLang();if(D)render(D)}
+function applyLang(){
+  document.title=T('title');
+  document.querySelector('.hdr-logo').textContent=T('title');
+  document.getElementById('langBtn').textContent=curLang==='zh'?'EN':'ZH';
+  document.getElementById('flowTitleText').textContent=T('flowTitle');
+  document.getElementById('fActive').textContent=T('active');
+  document.getElementById('fRecent').textContent=T('recent');
+  document.getElementById('fAll').textContent=T('allProj');
+  document.getElementById('stH').textContent=T('stats');
+  document.getElementById('acH').textContent=T('activity');
+  document.getElementById('ttH').textContent=T('teamsTask');
+  document.getElementById('inboxInput').placeholder=T('sendPH');
+  document.getElementById('inboxBtn').textContent=T('send');
+  document.getElementById('recMgmtTitle').textContent=T('recMgmt');
+}
 const E=s=>s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';
 const FN=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);
 function FA(s){if(s<60)return Math.floor(s)+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m';return Math.floor(s/86400)+'d'}
@@ -229,140 +571,355 @@ function setF(f){CF=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.
 function toggleFlow(){flowOpen=!flowOpen;document.getElementById('flowBody').classList.toggle('open',flowOpen);document.getElementById('flowArr').classList.toggle('open',flowOpen)}
 let ws=null;
 function conn(){const p=location.protocol==='https:'?'wss:':'ws:';ws=new WebSocket(`${p}//${location.host}/ws`);
-ws.onopen=()=>{document.getElementById('ws').classList.remove('off');document.getElementById('wst').textContent='LIVE'};
+ws.onopen=()=>{document.getElementById('ws').classList.remove('off');document.getElementById('wst').textContent=T('live')};
 ws.onmessage=e=>{try{D=JSON.parse(e.data);render(D)}catch(er){console.error(er)}};
-ws.onclose=()=>{document.getElementById('ws').classList.add('off');document.getElementById('wst').textContent='OFFLINE';setTimeout(conn,3000)};
+ws.onclose=()=>{document.getElementById('ws').classList.add('off');document.getElementById('wst').textContent=T('offline');setTimeout(conn,3000)};
 ws.onerror=()=>ws.close()}
 conn();
+applyLang();
 
 function render(d){
   renderHdr(d.summary,d.stats);
-  renderFlow(d.teams);
+  renderFlow(d.teams,d.projects);
   renderProjects(d.projects);
   renderStats(d.stats,d.tasks);
   renderAct(d.history);
   renderTT(d.teams,d.tasks);
+  // Update recording state
+  if(d.recording){
+    _recording_active=d.recording.active;
+    updateRecUI(d.recording);
+  }
 }
 
 function renderHdr(s,st){
   s=s||{};st=st||{};let h='';
-  h+=`<div class="chip"><span class="chip-l">Projects</span><span class="chip-v">${s.totalProjects||0}</span></div>`;
-  h+=`<div class="chip"><span class="chip-l">Active</span><span class="chip-v g">${s.totalActiveSessions||0}</span></div>`;
-  h+=`<div class="chip"><span class="chip-l">Recent</span><span class="chip-v o">${s.totalRecentSessions||0}</span></div>`;
-  h+=`<div class="chip"><span class="chip-l">Sessions</span><span class="chip-v b">${st.totalSessions||0}</span></div>`;
-  h+=`<div class="chip"><span class="chip-l">Msgs</span><span class="chip-v">${FN(st.totalMessages||0)}</span></div>`;
+  h+=`<div class="chip"><span class="chip-l">${T('proj')}</span><span class="chip-v">${s.totalProjects||0}</span></div>`;
+  h+=`<div class="chip"><span class="chip-l">${T('active')}</span><span class="chip-v g">${s.totalActiveSessions||0}</span></div>`;
+  h+=`<div class="chip"><span class="chip-l">${T('recent')}</span><span class="chip-v o">${s.totalRecentSessions||0}</span></div>`;
+  h+=`<div class="chip"><span class="chip-l">${T('sess')}</span><span class="chip-v b">${st.totalSessions||0}</span></div>`;
+  h+=`<div class="chip"><span class="chip-l">${T('msgs')}</span><span class="chip-v">${FN(st.totalMessages||0)}</span></div>`;
   document.getElementById('hdrC').innerHTML=h;
 }
 
+// ── Keyword Highlighting ──
+function highlightKW(raw){
+  let t=E(raw);
+  t=t.replace(/\b(TaskCreate|TaskUpdate|TaskList|TaskGet|TaskStop|TodoWrite)\b/g,'<span class="hl-task">$&</span>');
+  t=t.replace(/\b(completed|done|resolved|finished|success|passed)\b/gi,'<span class="hl-done">$&</span>');
+  t=t.replace(/\b(in_progress|in progress|working|implementing|running|processing|analyzing)\b/gi,'<span class="hl-prog">$&</span>');
+  t=t.replace(/\b(pending|waiting|queued|blocked|todo|TODO)\b/g,'<span class="hl-pend">$&</span>');
+  t=t.replace(/\b(Read|Write|Edit|Bash|Grep|Glob|WebFetch|WebSearch|Skill|NotebookEdit)\b/g,'<span class="hl-tool">$&</span>');
+  t=t.replace(/\b(SendMessage|TeamCreate|TeamDelete|broadcast|shutdown)\b/g,'<span class="hl-team">$&</span>');
+  t=t.replace(/\b(error|failed|failure|exception|bug|crash)\b/gi,'<span class="hl-err">$&</span>');
+  return t;
+}
+
+// ── Task ETA (当前任务倒计时) ──
+function taskETA(startedAt,avgMs){
+  if(!startedAt||startedAt<=0)return{recording:true};
+  const elapsed=Date.now()-startedAt;
+  if(avgMs>0){
+    const remain=avgMs-elapsed;
+    if(remain<=0)return{overtime:elapsed-avgMs};
+    return{ms:remain,elapsed:elapsed,avg:avgMs};
+  }
+  return{noHistory:true,elapsed:elapsed};
+}
+function fmtETA(ms){
+  if(ms<60000)return'<1m';
+  const s=Math.floor(ms/1000);
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  if(h>24)return Math.floor(h/24)+'d '+Math.floor(h%24)+'h';
+  if(h>0)return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+// ── Render Lead Pie Chart ──
+function renderLeadPie(teamStats,curTask){
+  if(!teamStats||teamStats.total<=0)return'';
+  const{total,completed,inProgress,pending,avgTaskMs,taskCount}=teamStats;
+  const pctDone=Math.round((completed/total)*100);
+  const degDone=(completed/total)*360;
+  const degProg=degDone+(inProgress/total)*360;
+  const conic=`conic-gradient(var(--green) 0deg ${degDone}deg, var(--orange) ${degDone}deg ${degProg}deg, var(--t3) ${degProg}deg 360deg)`;
+  let h=`<div class="lead-pie">`;
+  h+=`<div class="pie" style="background:${conic}"><div class="pie-hole"><span class="pie-pct">${pctDone}%</span></div></div>`;
+  h+=`<div class="pie-info">`;
+  h+=`<div class="pie-main">${T('overallProg')} ${completed}/${total}</div>`;
+  h+=`<div class="pie-legend"><span class="pie-legend-i"><span class="pie-legend-d" style="background:var(--green)"></span>${completed} ${T('done')}</span><span class="pie-legend-i"><span class="pie-legend-d" style="background:var(--orange)"></span>${inProgress} ${T('inProg')}</span><span class="pie-legend-i"><span class="pie-legend-d" style="background:var(--t3)"></span>${pending} ${T('pend')}</span></div>`;
+  // 当前任务倒计时
+  if(completed>=total){h+=`<div class="pie-alldone">${T('allDone')}</div>`}
+  else if(curTask&&curTask.startedAt){
+    const eta=taskETA(curTask.startedAt,avgTaskMs||0);
+    if(eta.ms!=null){h+=`<div class="pie-eta"><span class="pie-eta-icon">&#9201;</span><span class="pie-eta-label">${T('etaLabel')}</span><span class="pie-eta-time">${fmtETA(eta.ms)}</span></div>`}
+    else if(eta.overtime!=null){h+=`<div class="pie-eta"><span class="pie-eta-icon" style="color:var(--red)">&#9201;</span><span class="pie-eta-label" style="color:var(--red)">${T('overtime')}</span><span class="pie-eta-time" style="color:var(--red)">+${fmtETA(eta.overtime)}</span></div>`}
+    else if(eta.noHistory){h+=`<div class="pie-eta"><span class="pie-eta-label">${T('elapsed')}</span><span class="pie-eta-time">${fmtETA(eta.elapsed)}</span><span class="pie-eta-label" style="margin-left:4px">(${T('recording')})</span></div>`}
+  } else if(taskCount>0){
+    h+=`<div class="pie-eta"><span class="pie-eta-label">${T('avgTask')}</span><span class="pie-eta-time">${fmtETA(avgTaskMs)}</span><span class="pie-eta-label" style="margin-left:4px">(${taskCount})</span></div>`;
+  }
+  h+=`</div></div>`;
+  return h;
+}
+
+// ── Render Agent Card ──
+function renderAgentCard(member,ownerTasks,teamName,isLead,teamStats){
+  const mt=ownerTasks[member.name]||[];
+  const pg=member.taskProgress||{completed:0,total:0,inProgress:0};
+  const pct=pg.total>0?Math.round((pg.completed/pg.total)*100):0;
+  const reasoning=member.reasoning||[];
+  const sessR=member.sessionReasoning||[];
+  const activity=member.currentActivity||'';
+  let h=`<div class="acard ${isLead?'lead':'mate'} ${member.active?'active':''}" ${!member.active&&!isLead?'style="opacity:.7"':''} onclick="openInbox('${E(teamName)}','${E(member.name)}')">`;
+  // Header
+  h+=`<div class="acard-hdr"><div class="acard-name">${E(member.name)} <span class="acard-role ${isLead?'lead-r':'mate-r'}">${isLead?T('delegate'):E(member.agentType)}</span></div>`;
+  h+=`<div class="acard-status ${member.active?'on':'off'}"><div class="sd"></div>${member.active?T('activeS'):T('idle')}</div></div>`;
+  const curTask=mt.find(t=>t.status==='in_progress');
+  // Lead pie chart
+  if(isLead&&teamStats)h+=renderLeadPie(teamStats,curTask);
+  // Current task banner (prominent)
+  if(curTask&&member.active){
+    h+=`<div class="acard-current"><div class="acard-current-spinner"></div><div class="acard-current-label">${T('currentTask')}</div><div class="acard-current-text">${E(curTask.subject)}</div>`;
+    if(curTask.activeForm)h+=`<div class="acard-current-form">${E(curTask.activeForm)}</div>`;
+    h+=`</div>`;
+  }
+  // Progress bar
+  if(pg.total>0){
+    h+=`<div class="aprog"><div class="aprog-fill" style="width:${pct}%"></div></div>`;
+    h+=`<div class="aprog-label"><span>${pg.completed}/${pg.total} ${T('tasks')}</span><span class="v">${pct}%</span></div>`;
+  }
+  h+=`<div class="acard-body">`;
+  if(isLead)h+=`<div class="acard-desc">${T('leadDesc')}</div>`;
+  h+=`<div class="acard-model">${SM(member.model)}</div>`;
+  // Task list with activeForm
+  if(mt.length>0){
+    h+=`<div class="acard-section">${isLead?T('ownedTasks'):T('assignedTasks')}</div><div class="acard-tasks">`;
+    const mx=isLead?4:5;
+    for(const t of mt.slice(0,mx)){
+      const dc=t.status==='completed'?'done':t.status==='in_progress'?'prog':'pend';
+      h+=`<div class="acard-task"><div class="acard-task-dot ${dc}"></div><div class="acard-task-text ${dc==='done'?'done':''}" title="${E(t.subject)}">`;
+      h+=E(t.subject);
+      if(t.status==='in_progress'&&t.activeForm)h+=` <span style="font-size:9px;color:var(--orange);font-weight:500">[${E(t.activeForm)}]</span>`;
+      h+=`</div></div>`;
+    }
+    if(mt.length>mx)h+=`<div style="font-size:9px;color:var(--t3)">+${mt.length-mx} ${T('more')}</div>`;
+    h+=`</div>`;
+  }else{h+=`<div class="acard-notask">${T('noTasks')}</div>`}
+  // Reasoning terminal
+  const allR=[...sessR,...reasoning];
+  if(allR.length>0||activity){
+    h+=`<div class="areason"><div class="areason-hdr">${member.active?'<div class="pulse"></div>':''} ${T('reasoning')}</div><div class="areason-body">`;
+    if(activity&&member.active)h+=`<div class="areason-activity"><div class="spinner"></div><div class="act-text">${highlightKW(activity)}</div></div>`;
+    for(const r of sessR.slice(-4)){
+      if(r.tools&&r.tools.length>0){h+=`<div class="areason-tools">`;for(const tl of r.tools)h+=`<span class="areason-tool">${E(tl)}</span>`;h+=`</div>`}
+      if(r.text)h+=`<div class="areason-line"><span class="prefix">&gt;</span>${highlightKW(r.text)}</div>`;
+    }
+    for(const r of reasoning.slice(-4))h+=`<div class="areason-line"><span class="prefix">&gt;</span>${highlightKW(r.text)}</div>`;
+    h+=`</div></div>`;
+  }
+  h+=`</div>`; // /body
+  h+=`<div class="acard-footer">`;
+  if(member.inboxMessages>0)h+=`<span class="acard-tag msgs">${member.inboxMessages} ${T('inbox')}</span>`;
+  h+=`<span class="acard-tag inbox">${T('clickInbox')}</span>`;
+  h+=`</div></div>`;
+  return h;
+}
+
+// ── Render Shared Task List ──
+function renderSharedTaskList(tasks){
+  const dn=tasks.filter(t=>t.status==='completed').length;
+  const pr=tasks.filter(t=>t.status==='in_progress').length;
+  const pd=tasks.filter(t=>t.status==='pending').length;
+  let h=`<div class="tnode"><div class="tnode-title">${T('sharedTasks')}</div>`;
+  h+=`<div class="tnode-stats"><span><span class="td done" style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span> ${dn}</span><span><span class="td prog" style="width:5px;height:5px;border-radius:50%;background:var(--orange);display:inline-block"></span> ${pr}</span><span><span class="td pend" style="width:5px;height:5px;border-radius:50%;background:var(--t3);display:inline-block"></span> ${pd}</span></div>`;
+  for(const t of tasks.slice(0,12)){
+    const dc=t.status==='completed'?'done':t.status==='in_progress'?'prog':'pend';
+    h+=`<div class="tnode-item"><div class="td ${dc}"></div><div class="tt ${dc==='done'?'done':''}" title="${E(t.subject)}">${E(t.subject)}`;
+    if(t.status==='in_progress'&&t.activeForm)h+=` <span style="font-size:8px;color:var(--orange)">[${E(t.activeForm)}]</span>`;
+    h+=`</div>${t.owner?`<div class="to">${E(t.owner)}</div>`:''}`;
+    h+=`</div>`;
+  }
+  if(tasks.length>12)h+=`<div style="font-size:9px;color:var(--t3);padding:3px 0;text-align:center">+${tasks.length-12} ${T('more')}</div>`;
+  h+=`</div>`;
+  return h;
+}
+
+// ── Render Communication Flow ──
+function renderCommFlowSection(msgs){
+  let h=`<div class="comm-flow"><div class="comm-flow-hdr"><div class="fl"></div>${T('commFlow')}<div class="fl"></div></div>`;
+  for(const m of msgs.slice(0,10)){
+    const tc=m.type==='task'?'task':m.type==='shutdown'?'shutdown':'message';
+    h+=`<div class="comm-entry ${tc}">
+      <div class="comm-agents">
+        <span class="comm-from-name" title="${E(m.from)}">${E(m.from)}</span>
+        <div class="comm-arrow-vis"><div class="al ${tc}"></div><div class="ah"></div></div>
+        <span class="comm-to-name" title="${E(m.to)}">${E(m.to)}</span>
+      </div>
+      <div class="comm-body">
+        <div class="comm-text">${highlightKW(m.text)}</div>
+        <div class="comm-meta"><span class="comm-type-badge ${tc}">${m.type}</span></div>
+      </div>
+    </div>`;
+  }
+  h+=`</div>`;
+  return h;
+}
+
 // ── Agent Flow ──
-function renderFlow(teams){
+function renderFlow(teams,projects){
   const el=document.getElementById('flowBody');
   const bdg=document.getElementById('flowBdg');
-  if(!teams||teams.length===0){
-    bdg.textContent='No Team';
+  const hasTeams=teams&&teams.length>0;
+  // Standalone projects with active/recent sessions
+  const activeProjs=(projects||[]).filter(p=>p.hasActive||p.hasRecent);
+  const panelCount=(hasTeams?teams.length:0)+activeProjs.length;
+
+  if(panelCount===0){
+    bdg.textContent=T('noTeam');
     // Show placeholder architecture diagram
     el.innerHTML=`<div class="flow-teams">
-      <div class="team-panel"><div class="team-panel-hdr"><span class="team-panel-name">Subagent Architecture</span></div>
+      <div class="team-panel"><div class="team-panel-hdr"><span class="team-panel-name">${T('subArch')}</span></div>
       <div class="team-panel-body"><div class="topo">
-        <div class="anode lead"><div class="anode-name">Main Agent</div><div class="anode-meta">spawns subagents</div></div>
-        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">Task(subagent_type)</div><div class="topo-line"></div></div>
+        <div class="anode lead"><div class="anode-name">${T('mainAgent')}</div><div class="anode-meta">${T('spawns')}</div></div>
+        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('taskType')}</div><div class="topo-line"></div></div>
         <div class="topo-row">
-          <div class="anode mate"><div class="anode-name">Explore</div><div class="anode-meta">search</div></div>
-          <div class="anode mate"><div class="anode-name">Bash</div><div class="anode-meta">execute</div></div>
-          <div class="anode mate"><div class="anode-name">Plan</div><div class="anode-meta">design</div></div>
-          <div class="anode mate"><div class="anode-name">general</div><div class="anode-meta">code</div></div>
+          <div class="anode mate"><div class="anode-name">Explore</div><div class="anode-meta">${T('search')}</div></div>
+          <div class="anode mate"><div class="anode-name">Bash</div><div class="anode-meta">${T('exec')}</div></div>
+          <div class="anode mate"><div class="anode-name">Plan</div><div class="anode-meta">${T('design')}</div></div>
+          <div class="anode mate"><div class="anode-name">general</div><div class="anode-meta">${T('code')}</div></div>
         </div>
-        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">return result</div><div class="topo-line"></div></div>
-        <div style="font-size:10px;color:var(--t3);text-align:center;padding:8px">Each subagent runs independently, returns result to parent</div>
-      </div></div></div>
-      <div class="team-panel"><div class="team-panel-hdr"><span class="team-panel-name">Team Architecture</span></div>
-      <div class="team-panel-body"><div class="topo">
-        <div class="anode lead"><div class="anode-name">Team Lead</div><div class="anode-meta">coordinates</div></div>
-        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">TeamCreate + TaskCreate</div><div class="topo-line"></div></div>
-        <div class="tnode"><div class="tnode-title">Shared Task List</div>
-          <div class="tnode-item prog">task #1 (in progress)</div>
-          <div class="tnode-item pend">task #2 (pending)</div>
-          <div class="tnode-item done">task #3 (done)</div>
-        </div>
-        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">SendMessage + TaskUpdate</div><div class="topo-line"></div></div>
-        <div class="topo-row">
-          <div class="anode mate"><div class="anode-name">Worker A</div><div class="anode-meta">coding</div></div>
-          <div class="anode mate"><div class="anode-name">Worker B</div><div class="anode-meta">testing</div></div>
-          <div class="anode mate"><div class="anode-name">Worker C</div><div class="anode-meta">research</div></div>
-        </div>
+        <div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('retResult')}</div><div class="topo-line"></div></div>
+        <div style="font-size:10px;color:var(--t3);text-align:center;padding:8px">${T('eachSub')}</div>
       </div></div></div>
     </div>`;
     if(!flowOpen){el.classList.remove('open')} else {el.classList.add('open')}
     return;
   }
 
-  bdg.textContent=teams.length+' team'+(teams.length>1?'s':'');
+  bdg.textContent=panelCount+'';
   let h='<div class="flow-teams">';
-  for(const team of teams){
-    const lead=team.members.find(m=>m.name===team.leadName)||team.members.find(m=>m.agentType==='team-lead');
-    const mates=team.members.filter(m=>m!==lead);
-    const activeN=team.members.filter(m=>m.active).length;
-    h+=`<div class="team-panel">`;
-    h+=`<div class="team-panel-hdr"><span class="team-panel-name">${E(team.name)}</span><span style="font-size:11px;color:var(--green)">${activeN}/${team.memberCount} active</span></div>`;
-    if(team.description)h+=`<div class="team-panel-desc">${E(team.description)}</div>`;
-    h+=`<div class="team-panel-body"><div class="topo">`;
-    // Lead
-    if(lead){
-      h+=`<div class="anode lead ${lead.active?'active':''}">
-        <div class="anode-name">${E(lead.name)}</div>
-        <div class="anode-meta">${lead.active?'ACTIVE':'idle'}</div>
-        <div class="anode-model">${SM(lead.model)}</div>
-        ${lead.inboxMessages>0?`<div class="anode-msgs">${lead.inboxMessages} msgs</div>`:''}
-      </div>`;
-    }
-    h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">assign tasks & coordinate</div><div class="topo-line"></div></div>`;
-    // Task list
-    if(team.tasks&&team.tasks.length>0){
-      const done=team.tasks.filter(t=>t.status==='completed').length;
-      const prog=team.tasks.filter(t=>t.status==='in_progress').length;
-      const pend=team.tasks.filter(t=>t.status==='pending').length;
-      h+=`<div class="tnode"><div class="tnode-title">Tasks: ${done}/${team.tasks.length} done | ${prog} in progress | ${pend} pending</div>`;
-      for(const t of team.tasks.slice(0,8)){
-        const cls=t.status==='completed'?'done':t.status==='in_progress'?'prog':'pend';
-        const owner=t.owner?` [${E(t.owner)}]`:'';
-        h+=`<div class="tnode-item ${cls}" title="${E(t.subject)}">${E(t.subject)}${owner}</div>`;
+
+  // ── Render Teams ──
+  if(hasTeams){
+    for(const team of teams){
+      const lead=team.members.find(m=>m.name===team.leadName)||team.members.find(m=>m.agentType==='team-lead');
+      const mates=team.members.filter(m=>m!==lead);
+      const activeN=team.members.filter(m=>m.active).length;
+      const tasks=team.tasks||[];
+
+      h+=`<div class="team-panel">`;
+      h+=`<div class="team-panel-hdr"><span class="team-panel-name">${E(team.name)}</span><span style="font-size:11px;color:var(--green)">${activeN}/${team.memberCount} ${T('activeLabel')}</span></div>`;
+      if(team.description)h+=`<div class="team-panel-desc">${E(team.description)}</div>`;
+
+      h+=`<div class="team-panel-body"><div class="topo">`;
+
+      // Lead node
+      if(lead){
+        h+=`<div class="anode lead ${lead.active?'active':''} clickable" onclick="openInbox('${E(team.name)}','${E(lead.name)}')">`;
+        h+=`<div class="anode-name">${E(lead.name)}</div>`;
+        h+=`<div class="anode-meta">${lead.active?T('activeS'):T('idle')}</div>`;
+        h+=`<div class="anode-model">${SM(lead.model)}</div>`;
+        if(lead.inboxMessages>0)h+=`<div class="anode-msgs">${lead.inboxMessages} ${T('inbox')}</div>`;
+        h+=`</div>`;
       }
-      if(team.tasks.length>8)h+=`<div class="tnode-item pend">+${team.tasks.length-8} more</div>`;
-      h+=`</div>`;
-      h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">claim & work</div><div class="topo-line"></div></div>`;
-    }
-    // Teammates
-    if(mates.length>0){
-      h+=`<div class="topo-row">`;
-      for(const m of mates){
-        h+=`<div class="anode mate ${m.active?'active':''}" style="${!m.active?'opacity:.6':''}">
-          <div class="anode-name">${E(m.name)}</div>
-          <div class="anode-meta">${m.active?'WORKING':'idle'}</div>
-          <div class="anode-model">${SM(m.model)}</div>
-          ${m.inboxMessages>0?`<div class="anode-msgs">${m.inboxMessages} msgs</div>`:''}
-        </div>`;
+
+      h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('spawnAssign')}</div><div class="topo-line"></div></div>`;
+
+      // Task list (center)
+      if(tasks.length>0){
+        const done=tasks.filter(t=>t.status==='completed').length;
+        const prog=tasks.filter(t=>t.status==='in_progress').length;
+        const pend=tasks.filter(t=>t.status==='pending').length;
+        h+=`<div class="tnode"><div class="tnode-title">${T('sharedTasks')}: ${done}/${tasks.length} ${T('done')} | ${prog} ${T('inProg')} | ${pend} ${T('pend')}</div>`;
+        for(const t of tasks.slice(0,8)){
+          const cls=t.status==='completed'?'done':t.status==='in_progress'?'prog':'pend';
+          const owner=t.owner?` [${E(t.owner)}]`:'';
+          h+=`<div class="tnode-item ${cls}" title="${E(t.subject)}">${E(t.subject)}${owner}</div>`;
+        }
+        if(tasks.length>8)h+=`<div class="tnode-item pend">+${tasks.length-8} ${T('more')}</div>`;
+        h+=`</div>`;
       }
-      h+=`</div>`;
-    }
-    h+=`</div>`; // /topo
-    // Message flow
-    const msgs=(team.messageFlow||[]).filter(m=>m.type!=='idle');
-    if(msgs.length>0){
-      h+=`<div class="msg-flow"><div class="msg-flow-title">Recent Messages</div>`;
-      for(const m of msgs.slice(0,8)){
-        const tc=m.type==='task'?'task':m.type==='idle'?'idle':'message';
-        h+=`<div class="msg-item">
-          <span class="msg-from">${E(m.from)}</span>
-          <span class="msg-arrow">-&gt;</span>
-          <span class="msg-to">${E(m.to)}</span>
-          <span class="msg-type ${tc}">${m.type}</span>
-          <span class="msg-text" title="${E(m.text)}">${E(m.text)}</span>
-        </div>`;
+
+      h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('reportBack')}</div><div class="topo-line"></div></div>`;
+
+      // Mate nodes
+      if(mates.length>0){
+        h+=`<div class="topo-row">`;
+        for(const m of mates){
+          h+=`<div class="anode mate ${m.active?'active':''} clickable" style="${!m.active?'opacity:.6':''}" onclick="openInbox('${E(team.name)}','${E(m.name)}')">`;
+          h+=`<div class="anode-name">${E(m.name)}</div>`;
+          h+=`<div class="anode-meta">${m.active?T('working'):T('idle')}</div>`;
+          h+=`<div class="anode-model">${SM(m.model)}</div>`;
+          if(m.inboxMessages>0)h+=`<div class="anode-msgs">${m.inboxMessages} ${T('inbox')}</div>`;
+          h+=`</div>`;
+        }
+        h+=`</div>`;
       }
-      h+=`</div>`;
+
+      h+=`</div>`; // /topo
+
+      // Message flow
+      const msgs=(team.messageFlow||[]).filter(m=>m.type!=='idle');
+      if(msgs.length>0){
+        h+=`<div class="msg-flow"><div class="msg-flow-title">${T('recentMsgs')}</div>`;
+        for(const m of msgs.slice(0,8)){
+          const tc=m.type==='task'?'task':m.type==='shutdown'?'shutdown':'message';
+          h+=`<div class="msg-item"><span class="msg-from">${E(m.from)}</span><span class="msg-arrow">&rarr;</span><span class="msg-to">${E(m.to)}</span><span class="msg-type ${tc}">${m.type}</span><span class="msg-text" title="${E(m.text)}">${E(m.text)}</span></div>`;
+        }
+        h+=`</div>`;
+      }
+
+      h+=`</div></div>`; // /body, /panel
     }
-    h+=`</div></div>`; // /body, /panel
   }
+
+  // ── Render Standalone Projects as Flowcharts ──
+  for(const p of activeProjs){
+    const actS=p.sessions.filter(s=>s.status==='active');
+    const recS=p.sessions.filter(s=>s.status==='recent');
+    const allS=[...actS,...recS];
+    if(allS.length===0)continue;
+
+    // First active session = lead, rest = mates
+    const leadS=allS[0];
+    const mateS=allS.slice(1);
+
+    h+=`<div class="team-panel">`;
+    h+=`<div class="team-panel-hdr"><span class="team-panel-name">${E(p.name)}</span><span style="font-size:11px;color:var(--green)">${actS.length} ${T('active')} / ${allS.length} ${T('projSessions')}</span></div>`;
+    h+=`<div class="team-panel-desc" title="${E(p.path)}">${E(p.path)}</div>`;
+
+    h+=`<div class="team-panel-body"><div class="topo">`;
+
+    // Lead session node
+    h+=`<div class="anode lead ${leadS.status==='active'?'active':''}">`;
+    h+=`<div class="anode-name">#${E(leadS.sessionId)}</div>`;
+    h+=`<div class="anode-meta">${leadS.status==='active'?T('activeS'):T('recent')}</div>`;
+    if(leadS.live&&leadS.live.model)h+=`<div class="anode-model">${SM(leadS.live.model)}</div>`;
+    if(leadS.live&&leadS.live.lastUserMessage)h+=`<div class="anode-msgs" style="color:var(--t2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${E(leadS.live.lastUserMessage)}">"${E(leadS.live.lastUserMessage)}"</div>`;
+    if(leadS.summary)h+=`<div class="anode-msgs" style="color:var(--t3)" title="${E(leadS.summary)}">${E(leadS.summary)}</div>`;
+    h+=`</div>`;
+
+    // Connection to mates
+    if(mateS.length>0){
+      h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('taskType')}</div><div class="topo-line"></div></div>`;
+
+      h+=`<div class="topo-row">`;
+      for(const s of mateS){
+        h+=`<div class="anode mate ${s.status==='active'?'active':''}" style="${s.status!=='active'?'opacity:.6':''}">`;
+        h+=`<div class="anode-name">#${E(s.sessionId)}</div>`;
+        h+=`<div class="anode-meta">${s.status==='active'?T('working'):T('recent')}</div>`;
+        if(s.live&&s.live.model)h+=`<div class="anode-model">${SM(s.live.model)}</div>`;
+        if(s.live&&s.live.lastUserMessage)h+=`<div class="anode-msgs" style="color:var(--t2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${E(s.live.lastUserMessage)}">"${E(s.live.lastUserMessage)}"</div>`;
+        h+=`</div>`;
+      }
+      h+=`</div>`;
+
+      h+=`<div class="topo-conn"><div class="topo-line"></div><div class="topo-lbl">${T('retResult')}</div><div class="topo-line"></div></div>`;
+    }
+
+    h+=`</div></div></div>`; // /topo, /body, /panel
+  }
+
   h+=`</div>`;
   el.innerHTML=h;
   if(!flowOpen){el.classList.remove('open')} else {el.classList.add('open')}
@@ -372,20 +929,20 @@ function renderFlow(teams){
 function renderProjects(projects){
   const grid=document.getElementById('pgrid');
   const info=document.getElementById('finfo');
-  if(!projects||!projects.length){grid.innerHTML='<div class="empty">No projects</div>';info.textContent='';return}
+  if(!projects||!projects.length){grid.innerHTML='<div class="empty">'+T('noProj')+'</div>';info.textContent='';return}
   let filtered;
   if(CF==='active'){filtered=projects.filter(p=>p.hasActive);if(!filtered.length)filtered=projects.filter(p=>p.hasRecent||p.hasActive);if(!filtered.length)filtered=projects.slice(0,8)}
   else if(CF==='recent'){filtered=projects.filter(p=>p.hasActive||p.hasRecent);if(!filtered.length)filtered=projects.slice(0,12)}
   else filtered=projects;
-  info.textContent=`${filtered.length} / ${projects.length} projects`;
+  info.textContent=`${filtered.length} / ${projects.length} ${T('proj')}`;
   let h='';
   for(const p of filtered){
     const sc=p.hasActive?'act':p.hasRecent?'rec':'';
     const dc=p.hasActive?'active':p.hasRecent?'recent':'idle';
     h+=`<div class="pc ${sc}"><div class="pc-h"><div class="pc-name"><div class="pc-dot ${dc}"></div>${E(p.name)}</div><div class="pc-badges">`;
-    if(p.activeSessions>0)h+=`<span class="pc-badge ab">${p.activeSessions} active</span>`;
-    if(p.recentSessions>0)h+=`<span class="pc-badge">${p.recentSessions} recent</span>`;
-    h+=`<span class="pc-badge">${p.totalSessions} total</span></div></div>`;
+    if(p.activeSessions>0)h+=`<span class="pc-badge ab">${p.activeSessions} ${T('active')}</span>`;
+    if(p.recentSessions>0)h+=`<span class="pc-badge">${p.recentSessions} ${T('recent')}</span>`;
+    h+=`<span class="pc-badge">${p.totalSessions} ${T('total')}</span></div></div>`;
     h+=`<div class="pc-path" title="${E(p.path)}">${E(p.path)}</div><div class="pc-body">`;
     const actS=p.sessions.filter(s=>s.status==='active');
     const recS=p.sessions.filter(s=>s.status==='recent');
@@ -395,13 +952,13 @@ function renderProjects(projects){
     if(idleS.length>0){
       const isO=EI[p.dirName]||false;
       const show=CF==='all'?idleS:idleS.slice(0,5);
-      h+=`<div class="idle-s" onclick="togIdle('${E(p.dirName)}')"><span class="idle-arr ${isO?'open':''}" id="ia-${E(p.dirName)}">&#9654;</span>${idleS.length} idle session${idleS.length>1?'s':''}</div>`;
+      h+=`<div class="idle-s" onclick="togIdle('${E(p.dirName)}')"><span class="idle-arr ${isO?'open':''}" id="ia-${E(p.dirName)}">&#9654;</span>${idleS.length} ${T('idleSess')}</div>`;
       h+=`<div class="idle-box ${isO?'open':''}" id="ib-${E(p.dirName)}">`;
       for(const s of show)h+=renderSess(s,false);
-      if(CF!=='all'&&idleS.length>5)h+=`<div style="padding:4px 14px;font-size:10px;color:var(--t3)">+${idleS.length-5} more</div>`;
+      if(CF!=='all'&&idleS.length>5)h+=`<div style="padding:4px 14px;font-size:10px;color:var(--t3)">+${idleS.length-5} ${T('more')}</div>`;
       h+=`</div>`;
     }
-    if(!p.sessions.length)h+=`<div class="empty" style="padding:12px">No sessions</div>`;
+    if(!p.sessions.length)h+=`<div class="empty" style="padding:12px">${T('noSess')}</div>`;
     h+=`</div></div>`;
   }
   grid.innerHTML=h;
@@ -412,26 +969,26 @@ function renderSess(s,det){
   if(s.live&&s.live.model)h+=`<span class="ss-model">${SM(s.live.model)}</span>`;
   if(s.gitBranch&&s.gitBranch!=='HEAD')h+=`<span class="ss-branch">${E(s.gitBranch)}</span>`;
   if(s.live&&s.live.slug)h+=`<span class="ss-slug">${E(s.live.slug)}</span>`;
-  h+=`<span class="ss-age">${s.status==='active'?'now':FA(s.age)+' ago'}</span></div>`;
+  h+=`<span class="ss-age">${s.status==='active'?T('now'):FA(s.age)+' '+T('ago')}</span></div>`;
   if(s.summary)h+=`<div class="ss-sum" title="${E(s.summary)}">${E(s.summary)}</div>`;
   if(det){
     if(s.live&&s.live.lastUserMessage)h+=`<div class="ss-prompt" title="${E(s.live.lastUserMessage)}">"${E(s.live.lastUserMessage)}"</div>`;
     else if(s.firstPrompt&&s.firstPrompt!=='No prompt')h+=`<div class="ss-prompt" title="${E(s.firstPrompt)}">"${E(s.firstPrompt)}"</div>`;
-    h+=`<div class="ss-met"><span><span class="v">${s.messageCount||0}</span> msgs</span>`;
-    if(s.fileSize)h+=`<span><span class="v">${FN(s.fileSize)}</span> bytes</span>`;
+    h+=`<div class="ss-met"><span><span class="v">${s.messageCount||0}</span> ${T('msgs')}</span>`;
+    if(s.fileSize)h+=`<span><span class="v">${FN(s.fileSize)}</span> ${T('bytes')}</span>`;
     if(s.live&&s.live.version)h+=`<span>v${E(s.live.version)}</span>`;
     h+=`</div>`;
     if(s.live&&s.live.lastTool)h+=`<div class="ss-tool">&#9654; ${E(s.live.lastTool)}</div>`;
     if(s.live&&(s.live.inputTokens||s.live.outputTokens)){
-      h+=`<div class="ss-tok"><span>in:${FN(s.live.inputTokens)}</span><span>out:${FN(s.live.outputTokens)}</span>`;
-      if(s.live.cacheRead)h+=`<span>cache:${FN(s.live.cacheRead)}</span>`;
+      h+=`<div class="ss-tok"><span>${T('tokIn')}${FN(s.live.inputTokens)}</span><span>${T('tokOut')}${FN(s.live.outputTokens)}</span>`;
+      if(s.live.cacheRead)h+=`<span>${T('tokCache')}${FN(s.live.cacheRead)}</span>`;
       h+=`</div>`;
     }
     // Sub-conversation window
     if(s.conversation&&s.conversation.length>0){
       const cid=s.fullId||s.sessionId;
       const isO=EC[cid]!==false; // default open for active
-      h+=`<div class="convo"><div class="convo-hdr" onclick="togConvo('${E(cid)}')"><span><span class="convo-arr ${isO?'open':''}" id="ca-${E(cid)}">&#9654;</span> Conversation (${s.conversation.length})</span></div>`;
+      h+=`<div class="convo"><div class="convo-hdr" onclick="togConvo('${E(cid)}')"><span><span class="convo-arr ${isO?'open':''}" id="ca-${E(cid)}">&#9654;</span> ${T('convo')} (${s.conversation.length})</span></div>`;
       h+=`<div class="convo-body ${isO?'open':''}" id="cb-${E(cid)}">`;
       for(const turn of s.conversation){
         if(turn.role==='user'){
@@ -452,7 +1009,7 @@ function renderSess(s,det){
       h+=`</div></div>`;
     }
   } else {
-    h+=`<div class="ss-met"><span><span class="v">${s.messageCount||0}</span> msgs</span></div>`;
+    h+=`<div class="ss-met"><span><span class="v">${s.messageCount||0}</span> ${T('msgs')}</span></div>`;
   }
   h+=`</div>`;
   return h;
@@ -465,33 +1022,33 @@ function togConvo(id){EC[id]=EC[id]===false?true:false;const el=document.getElem
 function renderStats(stats,tasks){
   if(!stats)return;
   const u=stats.modelUsage||{};let h='';
-  h+=`<div class="sr"><span class="sr-l">Total Sessions</span><span class="sr-v">${stats.totalSessions||0}</span></div>`;
-  h+=`<div class="sr"><span class="sr-l">Total Messages</span><span class="sr-v">${FN(stats.totalMessages||0)}</span></div>`;
-  if(stats.firstSessionDate)h+=`<div class="sr"><span class="sr-l">Since</span><span class="sr-v">${new Date(stats.firstSessionDate).toLocaleDateString()}</span></div>`;
+  h+=`<div class="sr"><span class="sr-l">${T('totalSess')}</span><span class="sr-v">${stats.totalSessions||0}</span></div>`;
+  h+=`<div class="sr"><span class="sr-l">${T('totalMsgs')}</span><span class="sr-v">${FN(stats.totalMessages||0)}</span></div>`;
+  if(stats.firstSessionDate)h+=`<div class="sr"><span class="sr-l">${T('since')}</span><span class="sr-v">${new Date(stats.firstSessionDate).toLocaleDateString()}</span></div>`;
   const lo=stats.longestSession||{};
-  if(lo.duration)h+=`<div class="sr"><span class="sr-l">Longest</span><span class="sr-v">${FD(lo.duration)} (${lo.messageCount||0} msgs)</span></div>`;
+  if(lo.duration)h+=`<div class="sr"><span class="sr-l">${T('longest')}</span><span class="sr-v">${FD(lo.duration)} (${lo.messageCount||0} ${T('msgs')})</span></div>`;
   const da=stats.dailyActivity||[];const td=da.length>0?da[da.length-1]:null;
   if(td){
-    h+=`<div class="sr"><span class="sr-l">Today Msgs</span><span class="sr-v" style="color:var(--orange)">${td.messageCount||0}</span></div>`;
-    h+=`<div class="sr"><span class="sr-l">Today Tools</span><span class="sr-v" style="color:var(--purple)">${td.toolCallCount||0}</span></div>`;
+    h+=`<div class="sr"><span class="sr-l">${T('todayMsgs')}</span><span class="sr-v" style="color:var(--orange)">${td.messageCount||0}</span></div>`;
+    h+=`<div class="sr"><span class="sr-l">${T('todayTools')}</span><span class="sr-v" style="color:var(--purple)">${td.toolCallCount||0}</span></div>`;
   }
-  if(tasks&&tasks.total>0)h+=`<div class="sr"><span class="sr-l">Tasks</span><span class="sr-v" style="color:var(--green)">${tasks.completed}/${tasks.total}</span></div>`;
+  if(tasks&&tasks.total>0)h+=`<div class="sr"><span class="sr-l">${T('tasks')}</span><span class="sr-v" style="color:var(--green)">${tasks.completed}/${tasks.total}</span></div>`;
   const mx=Math.max(...Object.values(u).map(x=>(x.inputTokens||0)+(x.outputTokens||0)),1);
   for(const[model,v]of Object.entries(u)){
     const tk=(v.inputTokens||0)+(v.outputTokens||0);const pct=(tk/mx)*100;
-    h+=`<div class="mb"><div class="mb-h"><span class="mb-n">${SM(model)}</span><span class="mb-v">${FN(v.outputTokens||0)} out</span></div><div class="mb-t"><div class="mb-f ${MC(model)}" style="width:${pct}%"></div></div></div>`;
+    h+=`<div class="mb"><div class="mb-h"><span class="mb-n">${SM(model)}</span><span class="mb-v">${FN(v.outputTokens||0)} ${T('outLabel')}</span></div><div class="mb-t"><div class="mb-f ${MC(model)}" style="width:${pct}%"></div></div></div>`;
   }
   const hc=stats.hourCounts||{};const mh=Math.max(...Object.values(hc),1);
-  h+=`<div style="margin-top:10px;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Hourly</div><div class="hc">`;
+  h+=`<div style="margin-top:10px;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">${T('hourly')}</div><div class="hc">`;
   for(let i=0;i<24;i++){const c=hc[String(i)]||0;h+=`<div class="hb" style="height:${Math.max((c/mh)*100,2)}%" title="${i}:00 ${c}"></div>`}
   h+=`</div><div class="hl">`;for(let i=0;i<24;i++)h+=`<div>${i%6===0?i:''}</div>`;h+=`</div>`;
   document.getElementById('stD').innerHTML=h;
-  document.getElementById('stB').textContent=FN(stats.totalMessages||0)+' msgs';
+  document.getElementById('stB').textContent=FN(stats.totalMessages||0)+' '+T('msgs');
 }
 
 function renderAct(history){
   const el=document.getElementById('acD');
-  if(!history||!history.length){el.innerHTML='<div class="empty">No activity</div>';document.getElementById('acB').textContent='0';return}
+  if(!history||!history.length){el.innerHTML='<div class="empty">'+T('noAct')+'</div>';document.getElementById('acB').textContent='0';return}
   document.getElementById('acB').textContent=history.length;
   let h='';for(const a of history){
     h+=`<div class="ai"><div class="ai-t">${E(a.time)}</div><div><div class="ai-x">${E(a.display)}</div>`;
@@ -504,11 +1061,11 @@ function renderAct(history){
 function renderTT(teams,tasks){
   const el=document.getElementById('ttD');let h='';
   if(tasks&&tasks.total>0){
-    h+=`<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Tasks</div>`;
-    h+=`<div style="display:flex;gap:12px;font-size:11px"><span style="color:var(--green)">${tasks.completed} done</span><span style="color:var(--orange)">${tasks.inProgress} in progress</span><span style="color:var(--t2)">${tasks.pending} pending</span></div></div>`;
+    h+=`<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${T('tasks')}</div>`;
+    h+=`<div style="display:flex;gap:12px;font-size:11px"><span style="color:var(--green)">${tasks.completed} ${T('done')}</span><span style="color:var(--orange)">${tasks.inProgress} ${T('inProg')}</span><span style="color:var(--t2)">${tasks.pending} ${T('pend')}</span></div></div>`;
   }
   if(teams&&teams.length>0){
-    document.getElementById('ttB').textContent=teams.length+' team'+(teams.length>1?'s':'');
+    document.getElementById('ttB').textContent=teams.length+' '+T('team')+(teams.length>1&&curLang==='en'?'s':'');
     for(const team of teams){
       h+=`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--blue);margin-bottom:4px">${E(team.name)}</div>`;
       for(const m of team.members){
@@ -518,14 +1075,200 @@ function renderTT(teams,tasks){
       h+=`</div>`;
     }
   } else {
-    document.getElementById('ttB').textContent='none';
-    if(!tasks||tasks.total===0)h+='<div class="empty">No teams or tasks</div>';
+    document.getElementById('ttB').textContent=T('none');
+    if(!tasks||tasks.total===0)h+='<div class="empty">'+T('noTeamTask')+'</div>';
   }
   el.innerHTML=h;
 }
 // Default open flow section
 document.getElementById('flowBody').classList.add('open');
 document.getElementById('flowArr').classList.add('open');
+
+// ── Recording Functions ──
+let recStartTime=null;
+let recTimerInterval=null;
+
+function updateRecUI(recData){
+  const btn=document.getElementById('recBtn');
+  const timeEl=document.getElementById('recTime');
+  if(recData&&recData.active){
+    btn.classList.add('active');
+    timeEl.style.display='inline';
+    if(!recStartTime&&recData.startTime)recStartTime=new Date(recData.startTime).getTime();
+    if(!recTimerInterval){
+      recTimerInterval=setInterval(()=>{
+        if(!recStartTime)return;
+        const elapsed=Date.now()-recStartTime;
+        const s=Math.floor(elapsed/1000);
+        const m=Math.floor(s/60),sec=s%60;
+        timeEl.textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+      },1000);
+    }
+  }else{
+    btn.classList.remove('active');
+    timeEl.style.display='none';
+    timeEl.textContent='';
+    recStartTime=null;
+    if(recTimerInterval){clearInterval(recTimerInterval);recTimerInterval=null}
+  }
+}
+
+function toggleRecording(){
+  const btn=document.getElementById('recBtn');
+  if(btn.classList.contains('active')){
+    fetch('/api/recording/stop',{method:'POST'}).then(r=>r.json()).then(res=>{
+      updateRecUI({active:false});
+    }).catch(()=>{});
+  }else{
+    fetch('/api/recording/start',{method:'POST'}).then(r=>r.json()).then(res=>{
+      if(res.ok){
+        updateRecUI({active:true,startTime:new Date().toISOString()});
+      }
+    }).catch(()=>{});
+  }
+}
+
+function openRecMgmt(){
+  document.getElementById('recOverlay').classList.add('open');
+  loadRecList();
+}
+function closeRecMgmt(){document.getElementById('recOverlay').classList.remove('open')}
+
+function loadRecList(){
+  const body=document.getElementById('recBody');
+  const bar=document.getElementById('recStatusBar');
+  body.innerHTML='<div class="rec-empty">'+T('loading')+'</div>';
+  bar.innerHTML='';
+  fetch('/api/recording/list').then(r=>r.json()).then(recs=>{
+    // Show current recording status
+    if(_recording_active&&D&&D.recording&&D.recording.active){
+      const r=D.recording;
+      bar.innerHTML=`<div class="rec-status-bar"><div class="rec-dot-lg"></div><span class="info">${T('recActive')} <span class="val">${E(r.id||'')}</span> | ${T('recSessions')}: <span class="val">${r.capturedSessions||0}</span> | ${T('recEntries')}: <span class="val">${r.capturedEntries||0}</span></span></div>`;
+    }else{bar.innerHTML=''}
+
+    if(!recs||!recs.length){body.innerHTML='<div class="rec-empty">'+T('recNoRecordings')+'</div>';return}
+    let h='';
+    for(const rec of recs){
+      const isActive=rec.status==='recording';
+      const statusCls=isActive?'recording':'completed';
+      const statusTxt=isActive?T('recActive'):T('recCompleted');
+      let dur='';
+      if(rec.startTime){
+        const st=new Date(rec.startTime).getTime();
+        const et=rec.endTime?new Date(rec.endTime).getTime():Date.now();
+        const s=Math.floor((et-st)/1000);
+        const m=Math.floor(s/60),sec=s%60;
+        dur=m+'m '+sec+'s';
+      }
+      h+=`<div class="rec-item"><div class="rec-item-hdr">
+        <div class="rec-item-id">${E(rec.id)}</div>
+        <span class="rec-item-status ${statusCls}">${statusTxt}</span>
+      </div>`;
+      h+=`<div class="rec-item-meta">`;
+      if(rec.startTime)h+=`<span>${new Date(rec.startTime).toLocaleString()}</span>`;
+      if(dur)h+=`<span>${T('recDuration')}: <span class="v">${dur}</span></span>`;
+      h+=`<span>${T('recSessions')}: <span class="v">${rec.capturedSessions||0}</span></span>`;
+      h+=`<span>${T('recEntries')}: <span class="v">${rec.capturedEntries||0}</span></span>`;
+      h+=`</div>`;
+      // Files
+      if(rec.files&&rec.files.length>0){
+        h+=`<div class="rec-item-files">`;
+        for(const f of rec.files){
+          h+=`<a class="rec-file-link" href="/api/recording/${E(rec.id)}/files/${E(f)}" target="_blank">${E(f)}</a>`;
+        }
+        h+=`</div>`;
+      }
+      // Actions
+      if(!isActive){
+        h+=`<div class="rec-item-actions">
+          <button class="rec-action primary" onclick="recGenDocs('${E(rec.id)}')">${T('recGenDocs')}</button>
+          <button class="rec-action" onclick="recSummarize('${E(rec.id)}')">${T('recSummary')}</button>
+          <button class="rec-action" onclick="recGenSkill('${E(rec.id)}')">${T('recGenSkill')}</button>
+        </div>`;
+      }
+      h+=`</div>`;
+    }
+    body.innerHTML=h;
+  }).catch(()=>{body.innerHTML='<div class="rec-empty">'+T('failLoad')+'</div>'});
+}
+
+function recGenDocs(rid){
+  fetch('/api/recording/'+rid+'/generate',{method:'POST'}).then(r=>r.json()).then(res=>{
+    loadRecList();
+  }).catch(()=>{});
+}
+
+function recSummarize(rid){
+  fetch('/api/recording/'+rid+'/summarize',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(r=>r.json()).then(res=>{
+    if(res.taskId)pollRecTask(res.taskId,rid);
+  }).catch(()=>{});
+}
+
+function recGenSkill(rid){
+  fetch('/api/recording/'+rid+'/gen-skill',{method:'POST'}).then(r=>r.json()).then(res=>{
+    if(res.taskId)pollRecTask(res.taskId,rid);
+  }).catch(()=>{});
+}
+
+function pollRecTask(taskId,rid){
+  const check=()=>{
+    fetch('/api/recording/task/'+taskId).then(r=>r.json()).then(t=>{
+      if(t.status==='running'){setTimeout(check,2000)}
+      else{loadRecList()}
+    }).catch(()=>{});
+  };
+  setTimeout(check,2000);
+}
+
+let _recording_active=false;
+
+// ── Inbox ──
+let inboxTeam='',inboxAgent='';
+function openInbox(teamName,agentName){
+  inboxTeam=teamName;inboxAgent=agentName;
+  document.getElementById('inboxTitle').textContent=agentName+' - '+T('inbox');
+  document.getElementById('inboxMsgs').innerHTML='<div class="inbox-loading">'+T('loading')+'</div>';
+  document.getElementById('inboxInput').value='';
+  document.getElementById('inboxOverlay').classList.add('open');
+  fetchInbox();
+}
+function closeInbox(){document.getElementById('inboxOverlay').classList.remove('open');inboxTeam='';inboxAgent=''}
+function fetchInbox(){
+  fetch(`/api/teams/${encodeURIComponent(inboxTeam)}/inbox/${encodeURIComponent(inboxAgent)}`)
+    .then(r=>r.json()).then(msgs=>{
+      const el=document.getElementById('inboxMsgs');
+      if(!msgs||!msgs.length){el.innerHTML='<div class="inbox-empty">'+T('noMsg')+'</div>';return}
+      let h='';
+      for(const m of msgs){
+        const isHuman=m.from==='human-operator';
+        const ts=m.timestamp?new Date(m.timestamp).toLocaleTimeString('en-US',{hour12:false}):'';
+        h+=`<div class="inbox-msg">
+          <span class="inbox-msg-from ${isHuman?'human':''}">${E(m.from)}</span>
+          <div class="inbox-msg-body">
+            <div class="inbox-msg-text">${E(m.text)}</div>
+            <div class="inbox-msg-meta"><span>${ts}</span>${m.summary?'<span>'+E(m.summary)+'</span>':''}</div>
+          </div>
+          <span class="inbox-msg-type ${m.type}">${m.type}</span>
+        </div>`;
+      }
+      el.innerHTML=h;
+      el.scrollTop=el.scrollHeight;
+    }).catch(()=>{document.getElementById('inboxMsgs').innerHTML='<div class="inbox-empty">'+T('failLoad')+'</div>'});
+}
+function sendMsg(){
+  const input=document.getElementById('inboxInput');
+  const text=input.value.trim();
+  if(!text||!inboxTeam||!inboxAgent)return;
+  const btn=document.getElementById('inboxBtn');
+  btn.disabled=true;
+  fetch(`/api/teams/${encodeURIComponent(inboxTeam)}/send`,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({to:inboxAgent,text:text,summary:text.slice(0,80)})
+  }).then(r=>r.json()).then(res=>{
+    if(res.ok){input.value='';fetchInbox()}
+    btn.disabled=false;
+  }).catch(()=>{btn.disabled=false});
+}
 </script>
 </body>
 </html>
