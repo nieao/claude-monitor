@@ -94,6 +94,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 .sess-model{font-size:11px;color:var(--purple)}
 .sess-branch{font-size:11px;color:var(--teal)}
 .sess-age{margin-left:auto;font-size:11px;color:var(--t3);font-variant-numeric:tabular-nums}
+.sess-ls{font-size:10px;padding:1px 5px;border-radius:3px;background:var(--s1);color:var(--t2)}
+.sess-ls.ls-busy{background:#58a6ff22;color:#58a6ff}
+.sess-ls.ls-waiting{background:#f8514922;color:#f85149}
+.sess-ls.ls-idle{background:#8b949e22;color:#8b949e}
+.sess-wf{font-size:10px;color:#d29922;font-style:italic}
+.sess-sub{font-size:11px;color:var(--t3)}
 .sess-sum{font-size:13px;color:var(--t2);margin:4px 0 2px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sess-prompt{font-size:13px;color:var(--t1);margin:2px 0 2px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8}
 .sess-meta{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 0 16px;font-size:12px;color:var(--t3)}
@@ -736,6 +742,9 @@ function renderSess(s,det){
   h+=`<span class="sess-id">#${E(s.sessionId)}</span>`;
   if(s.live&&s.live.model)h+=`<span class="sess-model">${SM(s.live.model)}</span>`;
   if(s.gitBranch&&s.gitBranch!=='HEAD')h+=`<span class="sess-branch">${E(s.gitBranch)}</span>`;
+  if(s.liveStatus)h+=`<span class="sess-ls ls-${E(s.liveStatus)}">${E(s.liveStatus)}</span>`;
+  if(s.waitingFor)h+=`<span class="sess-wf">${E(s.waitingFor)}</span>`;
+  if(s.subagentCount>0)h+=`<span class="sess-sub">&#x1f916;${s.subagentCount}</span>`;
   h+=`<span class="sess-age">${s.status==='active'?T('now'):FA(s.age)+' '+T('ago')}</span></div>`;
 
   if(s.summary)h+=`<div class="sess-sum">${E(s.summary)}</div>`;

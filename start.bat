@@ -1,6 +1,13 @@
 @echo off
+:: ========== Anti-Crash Guard Shell ==========
+:: If launched by double-click, re-spawn under cmd /k so window never auto-closes
+if /i not "%~1"=="--guarded" (
+    start "Claude Monitor Launcher" cmd /k ""%~f0" --guarded"
+    exit /b 0
+)
+:: ========== End Guard ==========
+
 setlocal enabledelayedexpansion
-chcp 65001 >nul
 title Claude Code Monitor - Startup
 
 echo ========================================
@@ -22,14 +29,17 @@ echo.
 :: 2. Check dependencies
 echo [2/3] Checking dependencies...
 cd /d "%SCRIPT_DIR%"
+if errorlevel 1 (
+    echo   ERROR: cannot cd into script folder: %SCRIPT_DIR%
+    goto :hold
+)
 pip show fastapi >nul 2>&1
 if errorlevel 1 (
     echo   Installing dependencies...
     pip install -r requirements.txt
     if errorlevel 1 (
         echo   Failed to install dependencies
-        pause
-        exit /b 1
+        goto :hold
     )
 )
 echo   Dependencies OK
@@ -37,13 +47,11 @@ echo.
 
 :: 3. Start server
 echo [3/3] Starting server...
-cd /d "%SCRIPT_DIR%"
 if not exist "server.py" (
-    echo   Error: server.py not found
-    pause
-    exit /b 1
+    echo   ERROR: server.py not found in %SCRIPT_DIR%
+    goto :hold
 )
-start "Claude-Monitor" cmd /k "cd /d "%SCRIPT_DIR%" && python server.py"
+start "Claude-Monitor-Server" cmd /k "python server.py"
 echo.
 
 :: Open browser
@@ -57,7 +65,9 @@ echo Opening browser...
 timeout /t 3 /nobreak >nul
 start "" "http://localhost:5555"
 
-echo Press any key to close this window...
+:hold
+echo.
+echo Press any key to close this launcher window...
 pause >nul
 
 endlocal

@@ -23,6 +23,7 @@ STATS_FILE = CLAUDE_DIR / "stats-cache.json"
 HISTORY_FILE = CLAUDE_DIR / "history.jsonl"
 TEAMS_DIR = CLAUDE_DIR / "teams"
 TASKS_DIR = CLAUDE_DIR / "tasks"
+SESSIONS_DIR = CLAUDE_DIR / "sessions"
 
 ACTIVE_SECS = 120
 RECENT_SECS = 600
@@ -93,6 +94,61 @@ def track_team_tasks(teams: list[dict]):
         else:
             team["avgTaskMs"] = 0
             team["taskCount"] = 0
+
+
+# ── Live Session Detection (via ~/.claude/sessions/) ──
+
+
+def _is_pid_alive(pid: int) -> bool:
+    """Check if a process is still running (Windows-compatible)."""
+    try:
+        import ctypes
+        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+        handle = ctypes.windll.kernel32.OpenProcess(
+            PROCESS_QUERY_LIMITED_INFORMATION, False, pid,
+        )
+        if handle:
+            ctypes.windll.kernel32.CloseHandle(handle)
+            return True
+    except Exception:
+        pass
+    return False
+
+
+def get_live_sessions() -> dict[str, dict]:
+    """Read ~/.claude/sessions/*.json for real-time session state by PID.
+
+    These files are written by Claude Code CLI and contain live status info
+    (pid, cwd, status, name, waitingFor) that's more accurate than JSONL mtime.
+    Only includes sessions whose PID is still alive.
+    """
+    result = {}
+    if not SESSIONS_DIR.exists():
+        return result
+    for f in SESSIONS_DIR.iterdir():
+        if f.suffix != ".json":
+            continue
+        data = read_json(f)
+        if not isinstance(data, dict):
+            continue
+        sid = data.get("sessionId", "")
+        pid = data.get("pid")
+        if not sid or not pid:
+            continue
+        if not _is_pid_alive(pid):
+            continue
+        result[sid] = {
+            "pid": pid,
+            "cwd": data.get("cwd", ""),
+            "status": data.get("status", ""),
+            "name": data.get("name", ""),
+            "version": data.get("version", ""),
+            "waitingFor": data.get("waitingFor", ""),
+            "startedAt": data.get("startedAt", 0),
+            "updatedAt": data.get("updatedAt", 0),
+            "kind": data.get("kind", ""),
+        }
+    return result
 
 
 # ── Utilities ──
@@ -191,6 +247,39 @@ def get_agent_reasoning(jsonl_path: Path, max_items: int = 6) -> list[dict]:
                 "ts": entry.get("timestamp", ""),
             })
     return items[-max_items:]
+
+
+def get_session_header(jsonl_path: Path, max_lines: int = 25) -> dict:
+    """Read first few lines of a JSONL to extract session metadata.
+
+    New CLI versions write custom-title, agent-name, cwd, version at file head.
+    sessions-index.json no longer exists, so this is the primary metadata source.
+    """
+    result = {"title": "", "agentName": "", "cwd": "", "version": ""}
+    try:
+        with open(jsonl_path, "r", encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f):
+                if i >= max_lines:
+                    break
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    entry = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                etype = entry.get("type", "")
+                if etype == "custom-title" and not result["title"]:
+                    result["title"] = entry.get("customTitle", "")
+                elif etype == "agent-name" and not result["agentName"]:
+                    result["agentName"] = entry.get("agentName", "")
+                if entry.get("cwd") and not result["cwd"]:
+                    result["cwd"] = entry["cwd"]
+                if entry.get("version") and not result["version"]:
+                    result["version"] = entry["version"]
+    except Exception:
+        pass
+    return result
 
 
 # ── Session Live Detail ──
@@ -340,9 +429,12 @@ def get_session_conversation(jsonl_path: Path, max_turns: int = 12) -> list[dict
 # ── Project & Session Scanning ──
 
 
-def get_all_projects() -> list[dict]:
+def get_all_projects(live_sessions: dict | None = None) -> list[dict]:
     if not PROJECTS_DIR.exists():
         return []
+
+    if live_sessions is None:
+        live_sessions = {}
 
     now = time.time()
     projects = []
@@ -351,53 +443,51 @@ def get_all_projects() -> list[dict]:
         if not project_dir.is_dir():
             continue
 
-        index_data = read_json(project_dir / "sessions-index.json")
+        jsonl_files = [f for f in project_dir.iterdir() if f.suffix == ".jsonl"]
 
-        if index_data and isinstance(index_data, dict):
-            original_path = index_data.get("originalPath", "")
-            entries = index_data.get("entries", [])
-        else:
-            original_path = ""
-            entries = []
+        # Resolve project name + path from live sessions or JSONL headers
+        project_path = ""
+        project_name = ""
 
-        if original_path:
-            project_name = Path(original_path).name or original_path
-            project_path = original_path
-        else:
+        for f in jsonl_files:
+            sid = f.stem
+            if sid in live_sessions:
+                cwd = live_sessions[sid].get("cwd", "")
+                if cwd:
+                    project_path = cwd
+                    project_name = Path(cwd).name
+                    break
+
+        if not project_path and jsonl_files:
+            newest = max(jsonl_files, key=lambda f: mtime(f))
+            header = get_session_header(newest)
+            if header.get("cwd"):
+                project_path = header["cwd"]
+                project_name = Path(project_path).name
+
+        if not project_name:
             dirname = project_dir.name
-            segments = [s for s in dirname.split("-") if s]
-            project_name = segments[-1] if segments else dirname
+            cleaned = re.sub(r"^[A-Za-z]--", "", dirname)
+            parts = [p for p in cleaned.split("-") if p]
+            project_name = parts[-1] if parts else dirname
             project_path = dirname
-
-        session_meta = {}
-        for e in entries:
-            sid = e.get("sessionId", "")
-            if sid:
-                session_meta[sid] = {
-                    "summary": e.get("summary", ""),
-                    "firstPrompt": e.get("firstPrompt", ""),
-                    "messageCount": e.get("messageCount", 0),
-                    "created": e.get("created", ""),
-                    "modified": e.get("modified", ""),
-                    "gitBranch": e.get("gitBranch", ""),
-                    "isSidechain": e.get("isSidechain", False),
-                }
 
         sessions = []
         has_active = False
         has_recent = False
         latest_mtime = 0.0
 
-        for f in project_dir.iterdir():
-            if f.suffix != ".jsonl":
-                continue
-
+        for f in jsonl_files:
             sid = f.stem
             mt = mtime(f)
             age = now - mt
             latest_mtime = max(latest_mtime, mt)
 
-            if age < ACTIVE_SECS:
+            live_info = live_sessions.get(sid)
+            if live_info:
+                status = "active"
+                has_active = True
+            elif age < ACTIVE_SECS:
                 status = "active"
                 has_active = True
             elif age < RECENT_SECS:
@@ -406,7 +496,9 @@ def get_all_projects() -> list[dict]:
             else:
                 status = "idle"
 
-            meta = session_meta.get(sid, {})
+            session_title = ""
+            if live_info:
+                session_title = live_info.get("name", "")
 
             session = {
                 "sessionId": sid[:8],
@@ -415,20 +507,31 @@ def get_all_projects() -> list[dict]:
                 "age": age,
                 "mtime": mt,
                 "fileSize": fsize(f),
-                "summary": meta.get("summary", ""),
-                "firstPrompt": meta.get("firstPrompt", ""),
-                "messageCount": meta.get("messageCount", 0),
-                "created": meta.get("created", ""),
-                "modified": meta.get("modified", ""),
-                "gitBranch": meta.get("gitBranch", ""),
-                "isSidechain": meta.get("isSidechain", False),
+                "summary": session_title,
+                "firstPrompt": "",
+                "messageCount": 0,
+                "created": "",
+                "modified": "",
+                "gitBranch": "",
+                "isSidechain": False,
                 "live": None,
                 "conversation": None,
+                "liveStatus": live_info.get("status", "") if live_info else "",
+                "waitingFor": live_info.get("waitingFor", "") if live_info else "",
+                "subagentCount": 0,
             }
 
             if status in ("active", "recent"):
                 session["live"] = get_session_live_detail(f)
                 session["conversation"] = get_session_conversation(f, 12)
+                if not session["summary"] and session["live"]:
+                    session["summary"] = session["live"].get("slug", "")
+
+            subagent_dir = project_dir / sid / "subagents"
+            if subagent_dir.exists():
+                session["subagentCount"] = len(
+                    list(subagent_dir.glob("*.jsonl"))
+                )
 
             sessions.append(session)
 
@@ -732,7 +835,8 @@ def get_history(count: int = 15) -> list[dict]:
 
 
 def collect_all() -> dict:
-    projects = get_all_projects()
+    live_sessions = get_live_sessions()
+    projects = get_all_projects(live_sessions)
     teams = get_teams()
     track_team_tasks(teams)
 
@@ -1044,9 +1148,11 @@ def generate_documents(rid: str) -> dict:
 
 
 async def run_claude_cli(prompt: str, input_text: str) -> str:
-    """Run claude CLI with --print flag, pipe input via stdin."""
+    """Run claude CLI in pipe mode, using prompt as system-prompt."""
     proc = await asyncio.create_subprocess_exec(
-        "claude", "--print", "-p", prompt,
+        "claude", "-p",
+        "--output-format", "text",
+        "--system-prompt", prompt,
         stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
@@ -1300,7 +1406,9 @@ async def send_message(team_name: str, request: Request):
         "timestamp": datetime.now(tz=timezone.utc).isoformat(),
     }
     data.append(msg)
-    inbox_file.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp = inbox_file.with_suffix(".tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(inbox_file)
     return {"ok": True, "message": msg}
 
 

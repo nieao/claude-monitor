@@ -1,6 +1,5 @@
 @echo off
 setlocal enabledelayedexpansion
-chcp 65001 >nul
 title Claude Code Monitor - Stop
 
 echo ========================================
@@ -15,7 +14,7 @@ for /f "tokens=5" %%a in ('netstat -ano 2^>nul ^| findstr ":5555 " ^| findstr "L
 )
 
 :: Kill by window title
-taskkill /FI "WINDOWTITLE eq Claude-Monitor*" /F >nul 2>&1
+taskkill /FI "WINDOWTITLE eq Claude-Monitor-Server*" /F >nul 2>&1
 
 echo.
 echo   Stopped.

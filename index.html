@@ -158,6 +158,12 @@ body{font-family:'Cascadia Code','JetBrains Mono','Fira Code','Consolas',monospa
 .ss-branch{font-size:10px;color:var(--teal)}
 .ss-slug{font-size:10px;color:var(--t3);font-style:italic}
 .ss-age{margin-left:auto;font-size:10px;color:var(--t3);font-variant-numeric:tabular-nums}
+.ss-live-status{font-size:9px;padding:1px 5px;border-radius:3px;background:var(--s1);color:var(--t2)}
+.ss-live-status.ls-busy{background:#58a6ff22;color:#58a6ff}
+.ss-live-status.ls-waiting{background:#f8514922;color:#f85149}
+.ss-live-status.ls-idle{background:#8b949e22;color:#8b949e}
+.ss-waiting{font-size:9px;color:#d29922;font-style:italic}
+.ss-sub{font-size:10px;color:var(--t3)}
 .ss-sum{font-size:13px;color:var(--t2);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ss-prompt{font-size:13px;color:var(--t1);margin:2px 0 2px 15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8}
 .ss-met{display:flex;gap:12px;margin:3px 0 0 15px;font-size:12px;color:var(--t3)}
@@ -969,6 +975,9 @@ function renderSess(s,det){
   if(s.live&&s.live.model)h+=`<span class="ss-model">${SM(s.live.model)}</span>`;
   if(s.gitBranch&&s.gitBranch!=='HEAD')h+=`<span class="ss-branch">${E(s.gitBranch)}</span>`;
   if(s.live&&s.live.slug)h+=`<span class="ss-slug">${E(s.live.slug)}</span>`;
+  if(s.liveStatus)h+=`<span class="ss-live-status ls-${E(s.liveStatus)}">${E(s.liveStatus)}</span>`;
+  if(s.waitingFor)h+=`<span class="ss-waiting">${E(s.waitingFor)}</span>`;
+  if(s.subagentCount>0)h+=`<span class="ss-sub">&#x1f916;${s.subagentCount}</span>`;
   h+=`<span class="ss-age">${s.status==='active'?T('now'):FA(s.age)+' '+T('ago')}</span></div>`;
   if(s.summary)h+=`<div class="ss-sum" title="${E(s.summary)}">${E(s.summary)}</div>`;
   if(det){

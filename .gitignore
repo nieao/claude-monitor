@@ -7,7 +7,6 @@ nul
 *.bak
 .venv/
 venv/
-bdd-testing-skill/
 node_modules/
 promo-video/node_modules/
 promo-video/dist/
